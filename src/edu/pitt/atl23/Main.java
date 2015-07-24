@@ -690,6 +690,11 @@ public class Main extends LWJGLWindow {
 							// change tri color
 						}
 						break;
+                    case Keyboard.KEY_N:
+                        if(focus == 0) {
+                            flipNormals();
+                        }
+                        break;
 					case Keyboard.KEY_ESCAPE:
 						leaveMainLoop();
 						break;
@@ -834,72 +839,72 @@ public class Main extends LWJGLWindow {
 		camera.calcViewMatrix();
 
 		// multiply perspective * view
-		Mat4 vp = Mat4.mul(camera.getPerspectiveMatrix(), camera.getViewMatrix());
+		Mat4 world2clip = Mat4.mul(camera.getPerspectiveMatrix(), camera.getViewMatrix());
+        Mat4 world2cam = camera.getViewMatrix();
 
-		// set view matrix for the 3d shaders
+		// set uniforms for the 3d shaders
 		glUseProgram(colorUniformProgram.theProgram);
-		glUniformMatrix4(colorUniformProgram.projectionViewMatrixUnif, false,
-                vp.fillAndFlipBuffer(mat4Buffer));
+		glUniformMatrix4(colorUniformProgram.worldToClipMatrix, false, world2clip.fillAndFlipBuffer(mat4Buffer));
 		glUseProgram(0);
 
 		glUseProgram(colorArrayProgram.theProgram);
-		glUniformMatrix4(colorArrayProgram.projectionViewMatrixUnif, false,
-                vp.fillAndFlipBuffer(mat4Buffer));
-        glUniform3f(colorArrayProgram.ambientLightUnif, 0.5f, 0.5f, 0.5f);
-        glUniform3f(colorArrayProgram.dirToLightUnif, 1.0f, 1.0f, 1.0f);
-        glUniform3f(colorArrayProgram.lightIntensityUnif, 1.0f, 1.0f, 1.0f);
+		glUniformMatrix4(colorArrayProgram.worldToClipMatrix, false, world2clip.fillAndFlipBuffer(mat4Buffer));
+        glUniformMatrix4(colorArrayProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
+        glUniform4f(colorArrayProgram.dirLight, 0.5f, 0.2f, 1.0f, 1.0f);
+        glUniform4f(colorArrayProgram.dirLightMag, 0.5f, 0.5f, 0.5f, 1.0f);
+        glUniform4f(colorArrayProgram.ambient, 0.5f, 0.5f, 0.5f, 1.0f);
 		glUseProgram( 0 );
 
 		/************************/
 		/**** VIEWER RENDERS ****/
 		/************************/
 
-		// OpenGL state enables
+		// OpenGL state
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(true);
 		glDepthFunc(GL_LEQUAL);
 		glDepthRange(0.0f, 1.0f);
 		glEnable(GL32.GL_DEPTH_CLAMP);
-
-		// set viewport
 		glViewport(xoffset, yoffset, viewerWidth, viewerHeight);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
 
-		// render
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CW);
+		// render plane
 		plane.render(colorUniformProgram, 0.150f, 0.150f, 0.150f, 1.0f, 2);
-		glDisable(GL_CULL_FACE);
+        // render axes
+        glDisable(GL_CULL_FACE);
 		if(focus == 0) {
 			axes.render(colorUniformProgram, 0.793f, 0.375f, 0.176f, 1.0f, 2);
 		} else {
 			axes.render(colorUniformProgram, 0.406f, 0.590f, 0.730f, 1.0f, 2);
 		}
-		Mat4 PV = Mat4.mul(camera.getPerspectiveMatrix(), camera.getViewMatrix());
+        // render axis labels
 		glUseProgram(0);
 		glDisable(GL_DEPTH_TEST);
 		if(focus == 0) {
-			Vec4 temp = Mat4.mul(PV, new Vec4(10.5f, 0.18f, 0.0f, 1f));
+			Vec4 temp = Mat4.mul(world2clip, new Vec4(10.5f, 0.18f, 0.0f, 1f));
 			temp.scale(1 / temp.w);
 			monospacedBold36.drawString(((temp.x + 1) * viewerWidth / 2)+xoffset/2,
 				(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "X", orange);
-			temp = Mat4.mul(PV, new Vec4(0f, 0.18f, 10.5f, 1f));
+			temp = Mat4.mul(world2clip, new Vec4(0f, 0.18f, 10.5f, 1f));
 			temp.scale(1 / temp.w);
 			monospacedBold36.drawString(((temp.x + 1) * viewerWidth / 2)+xoffset/2,
 				(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "Z", orange);
 		} else {
-			Vec4 temp = Mat4.mul(PV, new Vec4(10.5f, 0.18f, 0.0f, 1f));
+			Vec4 temp = Mat4.mul(world2clip, new Vec4(10.5f, 0.18f, 0.0f, 1f));
 			temp.scale(1 / temp.w);
 			monospacedBold36.drawString(((temp.x + 1) * viewerWidth / 2)+xoffset/2,
 				(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "X", blue);
-			temp = Mat4.mul(PV, new Vec4(0f, 0.18f, 10.5f, 1f));
+			temp = Mat4.mul(world2clip, new Vec4(0f, 0.18f, 10.5f, 1f));
 			temp.scale(1 / temp.w);
 			monospacedBold36.drawString(((temp.x + 1) * viewerWidth / 2)+xoffset/2,
 				(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "Z", blue);
 		}
 		glEnable(GL_DEPTH_TEST);
-
+        // render model
 		glDisable(GL_BLEND);
+        glEnable(GL_CULL_FACE);
 		if(selectionMode == 0){
 			if(viewMode == 0) {
 				theModel.render(colorUniformProgram, 0.050f, 0.072f, 0.090f, 1.0f, 0);
@@ -934,10 +939,12 @@ public class Main extends LWJGLWindow {
 				theModel.render(colorUniformProgram, 0.406f, 0.590f, 0.730f, 1.0f, 1);
 			}
 		}
-
+        // render cursor
+        glDisable(GL_CULL_FACE);
 		if(renderCursor) {
 			cursor.render(colorUniformProgram);
 		}
+        // render selection mesh
 		if(viewMode == 1 && selectionMode == 2) {
 			selection.render(colorUniformProgram, 0.793f, 0.375f, 0.176f, 1.0f, 1);
 			if(currentTri != null) {
@@ -956,11 +963,9 @@ public class Main extends LWJGLWindow {
 		glDisable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
-
-		// set viewport
 		glViewport(0, 0, guiWidth, guiHeight);
 
-		// render
+		// render gui
 		panel.render(colorArray2DProgram);
 		panel.renderFocus(colorUniform2DProgram, focus, grabbing, renderCursor);
 		panel.renderViewMode(colorUniform2DProgram, viewMode);
@@ -1244,7 +1249,6 @@ public class Main extends LWJGLWindow {
 		clearSelection();
 	}
 
-	//todo: needs to delete vertices that are left within the mesh after extrusion
 	private void extrudeSelectedTriangles() {
 		ArrayList<Triangle> tris = selection.getTris();
 		clearSelection();
@@ -1342,6 +1346,15 @@ public class Main extends LWJGLWindow {
 		}
 		grabbing = true;
 	}
+
+    private void flipNormals() {
+        ArrayList<Triangle> tris = selection.getTris();
+        clearSelection();
+
+        for(Triangle t: tris) {
+            theModel.flipNormal(t);
+        }
+    }
 
 	private void save() {
 		try {

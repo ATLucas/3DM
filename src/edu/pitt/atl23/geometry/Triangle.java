@@ -20,6 +20,10 @@ public class Triangle {
 		calcNormal();
 	}
 
+    public boolean contains(Vertex v) {
+        return v == a || v == b || v == c;
+    }
+
 	public void refreshLines() {
 		s1 = new Line(a,b);
 		s2 = new Line(b,c);
@@ -27,8 +31,15 @@ public class Triangle {
 	}
 
 	public void calcNormal() {
-		normal = Vec3.cross(new Vec3(b.x-a.x,b.y-a.y,b.z-a.z), new Vec3(c.x-a.x,c.y-a.y,c.z-a.z));
+		normal = Vec3.cross( new Vec3(c.x-a.x,c.y-a.y,c.z-a.z), new Vec3(b.x-a.x,b.y-a.y,b.z-a.z));
 	}
+
+    public void flipNormal() {
+        Vertex temp = b;
+        b = c;
+        c = temp;
+        calcNormal();
+    }
 
 	public boolean equals(Triangle other){
 		return

@@ -30,14 +30,17 @@ public class IndexList {
 	private ArrayList<Line> lineAL;
 	private ArrayList<Triangle> triAL;
 	private ArrayList<ColorData> colorAL;
+    private ArrayList<Vec3> normalAL;
 	private short[] tris, lines, points;
 	private int[] colors;
+    private float[] normals;
 	private int triIBO, lineIBO, pointIBO;
 	private int triVAO, lineVAO, pointVAO;
-	private int colorUBO;
+	private int colorUBO, normalUBO;
 
 	private ShortBuffer indexBuffer;
 	private IntBuffer colorBuffer;
+    private FloatBuffer normalBuffer;
 
 	public IndexList(int size) {
 		if(size < 3) {
@@ -49,10 +52,12 @@ public class IndexList {
 		lines = new short[size*2];
 		points = new short[size];
 		colors = new int[1024];
+        normals = new float[4096];
 		triAL = new ArrayList<>();
 		lineAL = new ArrayList<>();
 		pointAL = new ArrayList<>();
 		colorAL = new ArrayList<>();
+        normalAL = new ArrayList<>();
 
 		triIBO = glGenBuffers();
 		loadTriIBO();
@@ -70,6 +75,8 @@ public class IndexList {
 
 		colorUBO = glGenBuffers();
 		loadColorBuffer();
+        normalUBO = glGenBuffers();
+        loadNormalBuffer();
 	}
 
 	public IndexList() {
@@ -86,7 +93,7 @@ public class IndexList {
 
 		/** Color **/
 		colorAL.add(t.color);
-		int offset = colorAL.size() - 1;
+		int offset = colorAL.size()-1;
 		colors[offset] = t.color.intVal;
 		IntBuffer cb = BufferUtils.createIntBuffer(1);
 		cb.put(new int[]{t.color.intVal}).flip();
@@ -95,6 +102,21 @@ public class IndexList {
 		glBufferSubData(GL_UNIFORM_BUFFER, offset, cb);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		/** End Color **/
+
+        /** Normal **/
+        normalAL.add(t.normal);
+        offset = (normalAL.size()-1)*4;
+        normals[offset] = t.normal.x;
+        normals[offset+1] = t.normal.y;
+        normals[offset+2] = t.normal.z;
+        normals[offset+3] = 0f;
+        FloatBuffer nb = BufferUtils.createFloatBuffer(4);
+        nb.put(new float[]{t.normal.x, t.normal.y, t.normal.z, 0f}).flip();
+        offset *= 4;
+        glBindBuffer(GL_UNIFORM_BUFFER, normalUBO);
+        glBufferSubData(GL_UNIFORM_BUFFER, offset, nb);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        /** End Normal **/
 
 		if(tris.length < (triAL.size())*3) {
 			// double size of the float array
@@ -209,10 +231,7 @@ public class IndexList {
 		/** Color **/
 		colorAL.remove(offset);
 		int last = colorAL.size();
-		for(int i=offset; i<last; i++) {
-			colors[i] = colors[i+1];
-		}
-		colors[last] = 0;
+		for(int i=offset; i<last; i++) colors[i] = colors[i+1];
 		IntBuffer cb = BufferUtils.createIntBuffer(last - offset);
 		cb.put(Arrays.copyOfRange(colors, offset, last)).flip();
 		glBindBuffer(GL_UNIFORM_BUFFER, colorUBO);
@@ -220,7 +239,19 @@ public class IndexList {
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		/** End Color **/
 
-		offset = offset*3;
+        /** Normal **/
+        normalAL.remove(offset);
+        offset *= 4;
+        last = normalAL.size()*4;
+        for(int i=offset; i<last; i++) normals[i] = normals[i+4];
+        FloatBuffer nb = BufferUtils.createFloatBuffer(last - offset);
+        nb.put(Arrays.copyOfRange(normals, offset, last)).flip();
+        glBindBuffer(GL_UNIFORM_BUFFER, normalUBO);
+        glBufferSubData(GL_UNIFORM_BUFFER, offset*4, nb);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        /** End Normal **/
+
+		offset = (offset/4)*3;
 
 		// remove tri indices from tri array
 		last = triAL.size()*3;
@@ -314,10 +345,15 @@ public class IndexList {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		/** Now remove all triangles that contain the vertex **/
-		ArrayList<Triangle> trisToRemove = v.getTris();
-		for(Triangle tri: trisToRemove) {
-			remove(tri);
-		}
+        ArrayList<Triangle> trisToRemove = new ArrayList<>();
+        for(Triangle tri: triAL) {
+            if(tri.contains(v)) {
+                trisToRemove.add(tri);
+            }
+        }
+        for(Triangle tri: trisToRemove) {
+            remove(tri);
+        }
 
 		/** Now remove all lines that contain the vertex **/
 		ArrayList<Line> linesToRemove = new ArrayList<>();
@@ -334,25 +370,67 @@ public class IndexList {
 	}
 
 	public boolean updateVertex(Vertex v) {
+        for(int i=0; i<triAL.size(); i++) {
+            if(triAL.get(i).contains(v)) {
+                triAL.get(i).calcNormal();
+                updateNormal(i);
+            }
+        }
 		return vertexList.updateVertex(v);
 	}
 
-	public boolean applyColor(Triangle t) {
-		for(int offset = 0; offset < triAL.size(); offset++) {
-			if(triAL.get(offset) == t) {
-				colorAL.set(offset, t.color);
-				colors[offset] = t.color.intVal;
-				IntBuffer cb = BufferUtils.createIntBuffer(1);
-				cb.put(new int[]{t.color.intVal}).flip();
-				offset *= 4;
-				glBindBuffer(GL_UNIFORM_BUFFER, colorUBO);
-				glBufferSubData(GL_UNIFORM_BUFFER, offset, cb);
-				glBindBuffer(GL_UNIFORM_BUFFER, 0);
-				return true;
-			}
-		}
-		return false;
+    public boolean updateTriangle(Triangle t) {
+        int offset = triAL.indexOf(t)*3;
+        if(offset < 0) return false;
+        // update verts array
+        tris[offset] = (short)vertexList.indexOf(t.a);
+        tris[offset + 1] = (short)vertexList.indexOf(t.b);
+        tris[offset + 2] = (short)vertexList.indexOf(t.c);
+        // Create temp short buffer
+        indexBuffer = BufferUtils.createShortBuffer(3);
+        indexBuffer.put(new short[]{tris[offset],tris[offset + 1],tris[offset + 2]}).flip();
+        // byte offset
+        offset = offset * 2;
+        // load subdata
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triIBO);
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, indexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        return true;
+    }
+
+	public boolean updateColor(Triangle t) {
+		int offset = triAL.indexOf(t);
+        colorAL.set(offset, t.color);
+        colors[offset] = t.color.intVal;
+        IntBuffer cb = BufferUtils.createIntBuffer(1);
+        cb.put(new int[]{t.color.intVal}).flip();
+        offset *= 4;
+        glBindBuffer(GL_UNIFORM_BUFFER, colorUBO);
+        glBufferSubData(GL_UNIFORM_BUFFER, offset, cb);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        return true;
 	}
+
+    public boolean updateNormal(Triangle t) {
+        return updateNormal(triAL.indexOf(t));
+    }
+
+    public boolean updateNormal(int index) {
+        Triangle t = triAL.get(index);
+        normalAL.set(index, t.normal);
+        int offset = index*4;
+        normals[offset] = t.normal.x;
+        normals[offset+1] = t.normal.y;
+        normals[offset+2] = t.normal.z;
+        normals[offset+3] = 0f;
+        FloatBuffer nb = BufferUtils.createFloatBuffer(4);
+        nb.put(new float[]{t.normal.x, t.normal.y, t.normal.z, 0f}).flip();
+        offset *= 4;
+        glBindBuffer(GL_UNIFORM_BUFFER, normalUBO);
+        glBufferSubData(GL_UNIFORM_BUFFER, offset, nb);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        return true;
+    }
 
 	public void merge(Vertex from, Vertex to) {
 		ArrayList<Triangle> checkTris = new ArrayList<>();
@@ -598,12 +676,17 @@ public class IndexList {
 	private void loadTriVAO() {
 		glBindVertexArray(triVAO);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
+        glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 12, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triIBO);
+
+		/*glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 24, 0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, false, 24, 12);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triIBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triIBO);*/
 
 		glBindVertexArray(0);
 	}
@@ -613,9 +696,7 @@ public class IndexList {
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
 		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 24, 0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, false, 24, 12);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 12, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lineIBO);
 
 		glBindVertexArray(0);
@@ -626,9 +707,7 @@ public class IndexList {
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
 		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 24, 0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, false, 24, 12);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 12, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pointIBO);
 
 		glBindVertexArray(0);
@@ -643,10 +722,24 @@ public class IndexList {
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
+    private void loadNormalBuffer() {
+        normalBuffer = BufferUtils.createFloatBuffer(normals.length);
+        normalBuffer.put(normals).flip();
+
+        glBindBuffer(GL_UNIFORM_BUFFER, normalUBO);
+        glBufferData(GL_UNIFORM_BUFFER, normalBuffer, GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    }
+
 	public void bindColorBuffer(ShaderProgram program) {
 		glUniformBlockBinding(program.theProgram, program.colorBlock, 0);
 		ARBUniformBufferObject.glBindBufferBase(GL_UNIFORM_BUFFER, 0, colorUBO);
 	}
+
+    public void bindNormalBuffer(ShaderProgram program) {
+        glUniformBlockBinding(program.theProgram, program.normalBlock, 1);
+        ARBUniformBufferObject.glBindBufferBase(GL_UNIFORM_BUFFER, 1, normalUBO);
+    }
 
 	private int distFromLineSegment(int px, int py, float ax, float ay, float bx, float by) {
 		float lengthSquared = distanceSquared(ax, ay, bx, by);
@@ -693,7 +786,6 @@ public class IndexList {
 		Vec3 PQ = Vec3.sub(a2, a1);
 		Vec3 PR = Vec3.sub(a3, a1);
 		Vec3 N = Vec3.cross(PQ, PR);
-		// N.x * (x-a1.x) + N.y * (y-a1.y) + N.z * (z-a1.z) = 0
 		float z1 = ( N.x * (x - a1.x) + N.y * (y - a1.y) ) / -N.z + a1.z;
 
 		PQ = Vec3.sub(b2, b1);

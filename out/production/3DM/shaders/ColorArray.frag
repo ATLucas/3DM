@@ -1,7 +1,5 @@
 #version 330
 
-smooth in vec3 normal_interp;
-
 out vec4 outputColor;
 
 struct block {

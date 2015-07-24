@@ -188,7 +188,7 @@ public class Panel {
 		GL20.glUseProgram(program.theProgram);
 
 		/** Load orthogonal matrix **/
-		glUniformMatrix4(program.orthogonalMatrixUnif, false,
+		glUniformMatrix4(program.orthogonalMatrix, false,
 				orthogonalMatrix.fillAndFlipBuffer(mat4Buffer));
 
 		/** Draw triangles **/
@@ -545,10 +545,10 @@ public class Panel {
 			GL20.glUseProgram(program.theProgram);
 
 			/** Load orthogonal matrix **/
-			glUniformMatrix4(program.orthogonalMatrixUnif, false,
+			glUniformMatrix4(program.orthogonalMatrix, false,
 					orthogonalMatrix.fillAndFlipBuffer(mat4Buffer));
 
-			glUniform4f(program.baseColorUnif, 0.797f, 0.469f, 0.195f, 1.0f);
+			glUniform4f(program.baseColor, 0.797f, 0.469f, 0.195f, 1.0f);
 			indices.drawLines();
 			GL20.glUseProgram(0);
 		}

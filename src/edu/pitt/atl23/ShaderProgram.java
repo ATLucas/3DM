@@ -19,14 +19,16 @@ public class ShaderProgram {
 	public static String CURRENT_DATAPATH = null;
 
 	public int theProgram;
-	public int modelMatrixUnif;
-	public int projectionViewMatrixUnif;
-	public int orthogonalMatrixUnif;
-	public int baseColorUnif;
+	public int modelToWorldMatrix;
+	public int worldToClipMatrix;
+    public int worldToCamera;
+	public int orthogonalMatrix;
+	public int baseColor;
 	public int colorBlock;
-    public int ambientLightUnif;
-    public int dirToLightUnif;
-    public int lightIntensityUnif;
+    public int normalBlock;
+    public int dirLight;
+    public int dirLightMag;
+    public int ambient;
 
 	public ShaderProgram(String vertexShaderFileName, String fragmentShaderFileName) {
 		ArrayList<Integer> shaderList = new ArrayList<>();
@@ -34,16 +36,18 @@ public class ShaderProgram {
 		shaderList.add( loadShader(GL_FRAGMENT_SHADER, fragmentShaderFileName) );
 
 		theProgram = createProgram(shaderList);
-		modelMatrixUnif = glGetUniformLocation(theProgram, "modelMatrix");
-		projectionViewMatrixUnif = glGetUniformLocation( theProgram, "projectionViewMatrix" );
-		baseColorUnif = glGetUniformLocation( theProgram, "baseColor" );
-        ambientLightUnif = glGetUniformLocation(theProgram, "ambientLight");
-        dirToLightUnif = glGetUniformLocation(theProgram, "dirToLight");
-        lightIntensityUnif = glGetUniformLocation(theProgram, "lightIntensity");
+		modelToWorldMatrix = glGetUniformLocation(theProgram, "modelToWorldMatrix");
+		worldToClipMatrix = glGetUniformLocation(theProgram, "worldToClipMatrix" );
+        worldToCamera = glGetUniformLocation(theProgram, "worldToCamera" );
+		baseColor = glGetUniformLocation(theProgram, "baseColor" );
+        dirLight = glGetUniformLocation(theProgram, "dirLight");
+        dirLightMag = glGetUniformLocation(theProgram, "dirLightMag");
+        ambient = glGetUniformLocation(theProgram, "ambient");
 
 		colorBlock = glGetUniformBlockIndex(theProgram, "colorBlock");
+        normalBlock = glGetUniformBlockIndex(theProgram, "normalBlock");
 
-		orthogonalMatrixUnif = glGetUniformLocation(theProgram, "orthogonalMatrix");
+		orthogonalMatrix = glGetUniformLocation(theProgram, "orthogonalMatrix");
 	}
 
 	private int loadShader(int shaderType, String shaderFilename) {

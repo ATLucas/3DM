@@ -14,7 +14,7 @@ import static org.lwjgl.opengl.GL20.*;
  */
 public class Mesh {
 
-	private IndexList indices; /** handles IBOs and VAOs and the VertexList, which has the VBO **/
+	private IndexList indices; /** manages IBOs and VAOs and the VertexList, which has the VBO **/
 	private Mat4 modelMatrix;
 	private FloatBuffer mat4Buffer;
 
@@ -45,13 +45,6 @@ public class Mesh {
 	}
 
 	public Triangle add(Triangle t, boolean force) {
-		t.a.addToNormal(t);
-		t.b.addToNormal(t);
-		t.c.addToNormal(t);
-		indices.updateVertex(t.a);
-		indices.updateVertex(t.b);
-		indices.updateVertex(t.c);
-
 		return indices.add(t, force);
 	}
 
@@ -64,13 +57,6 @@ public class Mesh {
 	}
 
 	public void remove(Triangle t) {
-		t.a.removeFromNormal(t);
-		t.b.removeFromNormal(t);
-		t.c.removeFromNormal(t);
-		indices.updateVertex(t.a);
-		indices.updateVertex(t.b);
-		indices.updateVertex(t.c);
-
 		indices.remove(t);
 	}
 
@@ -79,10 +65,6 @@ public class Mesh {
 		v.x += x;
 		v.y += y;
 		v.z += z;
-		for(Triangle t: v.getTris()) {
-			t.calcNormal();
-		}
-		v.calcNormal();
 		return updateVertex(v);
 	}
 
@@ -91,10 +73,6 @@ public class Mesh {
 		v.x = x;
 		v.y = y;
 		v.z = z;
-		for(Triangle t: v.getTris()) {
-			t.calcNormal();
-		}
-		v.calcNormal();
 		return updateVertex(v);
 	}
 
@@ -116,7 +94,7 @@ public class Mesh {
 
 	public void applyColor(Triangle t, ColorData cd) {
         t.color = cd;
-		indices.applyColor(t);
+		indices.updateColor(t);
 	}
 
 	public float getx() {
@@ -187,14 +165,21 @@ public class Mesh {
 		indices.merge(from, to);
 	}
 
+    public void flipNormal(Triangle t) {
+        t.flipNormal();
+        indices.updateTriangle(t);
+        indices.updateNormal(t);
+    }
+
 	public void render(ShaderProgram colorArrProgram) {
 		/** Use program **/
 		glUseProgram(colorArrProgram.theProgram);
 		/** Load model matrix **/
 		modelMatrix.fillAndFlipBuffer(mat4Buffer);
-		glUniformMatrix4(colorArrProgram.modelMatrixUnif, false, mat4Buffer);
+		glUniformMatrix4(colorArrProgram.modelToWorldMatrix, false, mat4Buffer);
 		/** Draw triangles **/
 		indices.bindColorBuffer(colorArrProgram);
+        indices.bindNormalBuffer(colorArrProgram);
 		indices.drawTriangles();
 	}
 
@@ -204,10 +189,10 @@ public class Mesh {
 
 		/** Load model matrix **/
 		modelMatrix.fillAndFlipBuffer(mat4Buffer);
-		glUniformMatrix4(program.modelMatrixUnif, false, mat4Buffer);
+		glUniformMatrix4(program.modelToWorldMatrix, false, mat4Buffer);
 
 		/** Set color **/
-		glUniform4f(program.baseColorUnif, red, green, blue, alpha);
+		glUniform4f(program.baseColor, red, green, blue, alpha);
 
 		/** Draw **/
 		if(geometry == 0) {
