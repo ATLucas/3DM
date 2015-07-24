@@ -81,9 +81,6 @@ public class LWJGLWindow {
         System.out.println("GL_RENDERER: " + glGetString(GL11.GL_RENDERER));
         System.out.println("GL_VERSION: " + glGetString(GL11.GL_VERSION));
         System.out.println("GL_SHADING_LANGUAGE: " + GL11.glGetString(GL20.GL_SHADING_LANGUAGE_VERSION));
-        if ( !GLContext.getCapabilities().OpenGL33 ) {
-            ;
-        }
     }
 
     ////////////////////////////////

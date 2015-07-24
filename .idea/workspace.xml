@@ -2,34 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e1c945ed-d397-4988-9c9f-2a728b99e9b9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/IndexList.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/IndexList.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/LWJGLWindow.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/LWJGLWindow.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/Main.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/Mesh.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/Mesh.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/gui/Panel$Field.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/gui/Panel$Field.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/gui/Panel.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/gui/Panel.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/ShaderProgram$CompileLinkProgramException.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/ShaderProgram$CompileLinkProgramException.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/ShaderProgram$CompileLinkShaderException.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/ShaderProgram$CompileLinkShaderException.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/ShaderProgram.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/ShaderProgram.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/Triangle.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/Triangle.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/Vertex.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/Vertex.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/VertexList.class" afterPath="$PROJECT_DIR$/out/production/3DM/edu/pitt/atl23/geometry/VertexList.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/shaders/ColorArray.frag" afterPath="$PROJECT_DIR$/out/production/3DM/shaders/ColorArray.frag" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shaders/ColorArray.frag" afterPath="$PROJECT_DIR$/src/shaders/ColorArray.frag" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/shaders/ColorArrayLight.frag" afterPath="$PROJECT_DIR$/out/production/3DM/shaders/ColorArrayLight.frag" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shaders/ColorArrayLight.frag" afterPath="$PROJECT_DIR$/src/shaders/ColorArrayLight.frag" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/IndexList.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/IndexList.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/LWJGLWindow.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/LWJGLWindow.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/Main.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Mesh.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Mesh.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/gui/Panel.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/gui/Panel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/ShaderProgram.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/ShaderProgram.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/3DM/shaders/ThreeDim.vert" afterPath="$PROJECT_DIR$/out/production/3DM/shaders/ThreeDim.vert" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shaders/ThreeDim.vert" afterPath="$PROJECT_DIR$/src/shaders/ThreeDim.vert" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Triangle.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Triangle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Vertex.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Vertex.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/VertexList.java" afterPath="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/VertexList.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/save_file.txt" afterPath="$PROJECT_DIR$/save_file.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="3DM.iws" />
@@ -55,31 +31,15 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3449048">
-              <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.35692307">
+              <caret line="86" column="22" selection-start-line="86" selection-start-column="22" selection-end-line="86" selection-end-column="22" />
               <folding>
-                <element signature="method#onStart#0;class#Main#0" expanded="false" />
-                <element signature="method#update#0;class#Main#0" expanded="false" />
-                <element signature="method#render#0;class#Main#0" expanded="false" />
-                <element signature="method#onStop#0;class#Main#0" expanded="false" />
-                <element signature="method#reshape#0;class#Main#0" expanded="false" />
-                <element signature="method#clearSelection#0;class#Main#0" expanded="false" />
-                <element signature="method#clearColorSelection#0;class#Main#0" expanded="false" />
-                <element signature="method#fillSelectedVertices#0;class#Main#0" expanded="false" />
-                <element signature="method#removeSelectedVertices#0;class#Main#0" expanded="false" />
-                <element signature="method#extrudeSelectedVertices#0;class#Main#0" expanded="false" />
-                <element signature="method#mergeSelectedVertices#0;class#Main#0" expanded="false" />
-                <element signature="method#selectLine#0;class#Main#0" expanded="false" />
-                <element signature="method#fillSelectedLines#0;class#Main#0" expanded="false" />
-                <element signature="method#removeSelectedLines#0;class#Main#0" expanded="false" />
-                <element signature="method#extrudeSelectedLines#0;class#Main#0" expanded="false" />
-                <element signature="method#selectTriangle#0;class#Main#0" expanded="false" />
-                <element signature="method#deselectTriangle#0;class#Main#0" expanded="false" />
-                <element signature="method#removeSelectedTriangles#0;class#Main#0" expanded="false" />
-                <element signature="method#extrudeSelectedTriangles#0;class#Main#0" expanded="false" />
-                <element signature="method#flipNormals#0;class#Main#0" expanded="false" />
-                <element signature="method#save#0;class#Main#0" expanded="false" />
-                <element signature="method#load#0;class#Main#0" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+                <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+                <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+                <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+                <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -132,9 +92,11 @@
         <option value="$PROJECT_DIR$/src/shaders/ColorArrayLight.frag" />
         <option value="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Mesh.java" />
         <option value="$PROJECT_DIR$/src/edu/pitt/atl23/ShaderProgram.java" />
-        <option value="$PROJECT_DIR$/src/edu/pitt/atl23/Main.java" />
         <option value="$PROJECT_DIR$/src/edu/pitt/atl23/geometry/VertexList.java" />
         <option value="$PROJECT_DIR$/src/shaders/ThreeDim.vert" />
+        <option value="$PROJECT_DIR$/src/edu/pitt/atl23/LWJGLWindow.java" />
+        <option value="$PROJECT_DIR$/src/edu/pitt/atl23/gui/Toast.java" />
+        <option value="$PROJECT_DIR$/src/edu/pitt/atl23/Main.java" />
       </list>
     </option>
   </component>
@@ -171,8 +133,6 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -259,6 +219,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="3DM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="3DM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="atl23" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="geometry" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -279,6 +261,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -289,8 +273,9 @@
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="dynamic.classpath" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Font" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.folding" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="RunManager" selected="Application.Main">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -477,34 +462,42 @@
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16306695" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2624729" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16306695" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26241902" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1609375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.frag" />
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.vert" />
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -520,11 +513,123 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/gui/Panel.java">
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47592387">
-          <caret line="40" column="43" selection-start-line="40" selection-start-column="43" selection-end-line="40" selection-end-column="43" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -532,7 +637,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.05711086">
           <caret line="3" column="3" selection-start-line="3" selection-start-column="3" selection-end-line="3" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -540,7 +644,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.09518477">
           <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -548,7 +651,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.09518477">
           <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -556,7 +658,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="12" selection-start-line="0" selection-start-column="12" selection-end-line="0" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -564,7 +665,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -572,9 +672,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="97" selection-start-line="33" selection-start-column="97" selection-end-line="33" selection-end-column="97" />
-          <folding>
-            <element signature="method#equals#0;class#Triangle#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -582,7 +679,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="20" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -590,13 +686,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.04761905">
           <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
-          <folding>
-            <element signature="method#VertexList#0;class#VertexList#0" expanded="false" />
-            <element signature="method#add#0;class#VertexList#0" expanded="false" />
-            <element signature="method#getVerts#0;class#VertexList#0" expanded="false" />
-            <element signature="method#delete#0;class#VertexList#0" expanded="false" />
-            <element signature="method#loadVBO#0;class#VertexList#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -604,44 +693,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3609831">
           <caret line="397" column="20" selection-start-line="397" selection-start-column="20" selection-end-line="397" selection-end-column="20" />
-          <folding>
-            <element signature="method#IndexList#0;class#IndexList#0" expanded="false" />
-            <element signature="method#add#1;class#IndexList#0" expanded="false" />
-            <element signature="method#add#2;class#IndexList#0" expanded="false" />
-            <element signature="method#remove#0;class#IndexList#0" expanded="false" />
-            <element signature="method#remove#1;class#IndexList#0" expanded="false" />
-            <element signature="method#remove#2;class#IndexList#0" expanded="false" />
-            <element signature="method#updateVertex#0;class#IndexList#0" expanded="false" />
-            <element signature="method#updateColor#0;class#IndexList#0" expanded="false" />
-            <element signature="method#updateNormal#1;class#IndexList#0" expanded="false" />
-            <element signature="method#merge#0;class#IndexList#0" expanded="false" />
-            <element signature="method#getLines#0;class#IndexList#0" expanded="false" />
-            <element signature="method#getTris#0;class#IndexList#0" expanded="false" />
-            <element signature="method#getSelectedVertex#0;class#IndexList#0" expanded="false" />
-            <element signature="method#getSelectedLines#0;class#IndexList#0" expanded="false" />
-            <element signature="method#getSelectedTriangle#0;class#IndexList#0" expanded="false" />
-            <element signature="method#getEquivalent#0;class#IndexList#0" expanded="false" />
-            <element signature="method#getEquivalent#1;class#IndexList#0" expanded="false" />
-            <element signature="method#getEquivalent#2;class#IndexList#0" expanded="false" />
-            <element signature="method#drawTriangles#0;class#IndexList#0" expanded="false" />
-            <element signature="method#drawLines#0;class#IndexList#0" expanded="false" />
-            <element signature="method#drawPoints#0;class#IndexList#0" expanded="false" />
-            <element signature="method#delete#0;class#IndexList#0" expanded="false" />
-            <element signature="method#loadTriIBO#0;class#IndexList#0" expanded="false" />
-            <element signature="method#loadLineIBO#0;class#IndexList#0" expanded="false" />
-            <element signature="method#loadPointIBO#0;class#IndexList#0" expanded="false" />
-            <element signature="method#loadTriVAO#0;class#IndexList#0" expanded="false" />
-            <element signature="method#loadLineVAO#0;class#IndexList#0" expanded="false" />
-            <element signature="method#loadPointVAO#0;class#IndexList#0" expanded="false" />
-            <element signature="method#loadColorBuffer#0;class#IndexList#0" expanded="false" />
-            <element signature="method#loadNormalBuffer#0;class#IndexList#0" expanded="false" />
-            <element signature="method#bindColorBuffer#0;class#IndexList#0" expanded="false" />
-            <element signature="method#bindNormalBuffer#0;class#IndexList#0" expanded="false" />
-            <element signature="method#distFromLineSegment#0;class#IndexList#0" expanded="false" />
-            <element signature="method#distanceSquared#0;class#IndexList#0" expanded="false" />
-            <element signature="method#triangleContainsPoint#0;class#IndexList#0" expanded="false" />
-            <element signature="method#triangleIsInFront#0;class#IndexList#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -649,7 +700,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -657,26 +707,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33179724">
           <caret line="9" column="65" selection-start-line="9" selection-start-column="65" selection-end-line="9" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Mesh.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47926268">
-          <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
-          <folding>
-            <element signature="method#moveTo#0;class#Mesh#0" expanded="false" />
-            <element signature="method#translateBy#0;class#Mesh#0" expanded="false" />
-            <element signature="method#translateTo#0;class#Mesh#0" expanded="false" />
-            <element signature="method#applyColor#0;class#Mesh#0" expanded="false" />
-            <element signature="method#getSelectedVertex#0;class#Mesh#0" expanded="false" />
-            <element signature="method#getSelectedLines#0;class#Mesh#0" expanded="false" />
-            <element signature="method#getSelectedTriangle#0;class#Mesh#0" expanded="false" />
-            <element signature="method#flipNormal#0;class#Mesh#0" expanded="false" />
-            <element signature="method#render#0;class#Mesh#0" expanded="false" />
-            <element signature="method#delete#0;class#Mesh#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -692,17 +722,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.03686636">
           <caret line="38" column="81" selection-start-line="38" selection-start-column="81" selection-end-line="38" selection-end-column="81" />
-          <folding>
-            <element signature="method#loadShader#0;class#ShaderProgram#0" expanded="false" />
-            <element signature="method#createProgram#0;class#ShaderProgram#0" expanded="false" />
-            <element signature="method#compileShader#0;class#ShaderProgram#0" expanded="false" />
-            <element signature="method#linkProgram#0;class#ShaderProgram#0" expanded="false" />
-            <element signature="method#loadShaderFile#0;class#ShaderProgram#0" expanded="false" />
-            <element signature="method#findFileOrThrow#0;class#ShaderProgram#0" expanded="false" />
-            <element signature="class#CompileLinkShaderException#0;class#ShaderProgram#0" expanded="false" />
-            <element signature="class#CompileLinkProgramException#0;class#ShaderProgram#0" expanded="false" />
-            <element signature="method#CompileLinkProgramException#0;class#CompileLinkProgramException#0;class#ShaderProgram#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -710,45 +729,60 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/LWJGLWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.60923076">
+          <caret line="63" column="19" selection-start-line="63" selection-start-column="12" selection-end-line="63" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_45/src.zip!/javax/swing/JOptionPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43384615">
+          <caret line="563" column="25" selection-start-line="563" selection-start-column="25" selection-end-line="563" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/gui/Panel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.12">
+          <caret line="40" column="43" selection-start-line="40" selection-start-column="43" selection-end-line="40" selection-end-column="43" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Camera.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0268757">
+        <state vertical-scroll-proportion="0.033846155">
           <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/geometry/Mesh.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.083077">
+          <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/pitt/atl23/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3449048">
-          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.35692307">
+          <caret line="86" column="22" selection-start-line="86" selection-start-column="22" selection-end-line="86" selection-end-column="22" />
           <folding>
-            <element signature="method#onStart#0;class#Main#0" expanded="false" />
-            <element signature="method#update#0;class#Main#0" expanded="false" />
-            <element signature="method#render#0;class#Main#0" expanded="false" />
-            <element signature="method#onStop#0;class#Main#0" expanded="false" />
-            <element signature="method#reshape#0;class#Main#0" expanded="false" />
-            <element signature="method#clearSelection#0;class#Main#0" expanded="false" />
-            <element signature="method#clearColorSelection#0;class#Main#0" expanded="false" />
-            <element signature="method#fillSelectedVertices#0;class#Main#0" expanded="false" />
-            <element signature="method#removeSelectedVertices#0;class#Main#0" expanded="false" />
-            <element signature="method#extrudeSelectedVertices#0;class#Main#0" expanded="false" />
-            <element signature="method#mergeSelectedVertices#0;class#Main#0" expanded="false" />
-            <element signature="method#selectLine#0;class#Main#0" expanded="false" />
-            <element signature="method#fillSelectedLines#0;class#Main#0" expanded="false" />
-            <element signature="method#removeSelectedLines#0;class#Main#0" expanded="false" />
-            <element signature="method#extrudeSelectedLines#0;class#Main#0" expanded="false" />
-            <element signature="method#selectTriangle#0;class#Main#0" expanded="false" />
-            <element signature="method#deselectTriangle#0;class#Main#0" expanded="false" />
-            <element signature="method#removeSelectedTriangles#0;class#Main#0" expanded="false" />
-            <element signature="method#extrudeSelectedTriangles#0;class#Main#0" expanded="false" />
-            <element signature="method#flipNormals#0;class#Main#0" expanded="false" />
-            <element signature="method#save#0;class#Main#0" expanded="false" />
-            <element signature="method#load#0;class#Main#0" expanded="false" />
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#focus#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#selectionMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#viewMode#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#editOutline#0;class#Main#0" expanded="false" />
+            <element signature="docComment;field#currentPane#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>

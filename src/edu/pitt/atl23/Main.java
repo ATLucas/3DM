@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL32;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 
+import javax.swing.*;
 import java.awt.Font;
 import java.io.*;
 import java.nio.FloatBuffer;
@@ -54,61 +55,65 @@ public class Main extends LWJGLWindow {
 	// for coloring triangles
 	private Triangle currentTri;
 
-	// 0: viewer
-	// 1: cursor edit x
-	// 2: cursor edit y
-	// 3: cursor edit z
-	// 4: track x
-	// 5: track y
-	// 6: track z
-	// 7: place
-	// 8: remove
-	// 9: merge
-	// 10: fill
-	// 11: extrude
-	// 12: grab/release
-	// 13: vertex selection
-	// 14: line selection
-	// 15: triangle selection
-	// 16: normal view
-	// 17: color view
-	// 18: wireframe view
-	// 19: hide/show cursor
-	// 20: save
-	// 21: load
-	// 22: shortcuts
-	// 23: color edit red
-	// 24: color edit green
-	// 25: color edit blue
-	// 26: color edit alpha
-	// 27: add color
+	/** 0: viewer
+        1: cursor edit x
+        2: cursor edit y
+        3: cursor edit z
+        4: track x
+        5: track y
+        6: track z
+        7: place
+        8: remove
+        9: merge
+        10: fill
+        11: extrude
+        12: grab/release
+        13: vertex selection
+        14: line selection
+        15: triangle selection
+        16: normal view
+        17: color view
+        18: wireframe view
+        19: hide/show cursor
+        20: save
+        21: load
+        22: shortcuts
+        23: color edit red
+        24: color edit green
+        25: color edit blue
+        26: color edit alpha
+        27: add color
+     **/
 	private int focus;
 
-	// 0: vertex selection
-	// 1: line selection
-	// 2: triangle selection
+	/** 0: vertex selection
+        1: line selection
+        2: triangle selection
+     **/
 	private int selectionMode;
 
-	// 0: normal
-	// 1: color
-	// 2: wireframe
+    /** 0: normal
+        1: color
+        2: wireframe
+     **/
 	private int viewMode;
 
-	// 0: x
-	// 1: y
-	// 2: z
-	// 3: red
-	// 4: green
-	// 5: blue
-	// 6: alpha
+    /** 0: x
+        1: y
+        2: z
+        3: red
+        4: green
+        5: blue
+        6: alpha
+     **/
 	private int editOutline;
 
-	// -1: none
-	// 0: edit color
-	// 1: edit cursor
+	/** -1: none
+         0: edit color
+         1: edit cursor
+     **/
 	private int currentPane;
 
-	// flags
 	private boolean grabbing;
 	private boolean renderCursor;
 
@@ -140,7 +145,6 @@ public class Main extends LWJGLWindow {
 		colorArrayProgram = new ShaderProgram("ThreeDim.vert", "ColorArrayLight.frag");
 		colorUniform2DProgram = new ShaderProgram("TwoDim.vert", "ColorUniform.frag");
 		colorArray2DProgram = new ShaderProgram("TwoDim.vert", "ColorArray.frag");
-
 
 		monospacedBold36 = new TrueTypeFont(new Font("Monospaced", Font.BOLD, 36), true);
 		orange = new Color(0.793f, 0.375f, 0.176f);
@@ -435,9 +439,9 @@ public class Main extends LWJGLWindow {
 				} else if(focus == 19) {
 					renderCursor = !renderCursor;
 				} else if(focus == 20) {
-					save();
+                    save();
 				} else if(focus == 21) {
-					load();
+                    load();
 				} else if(focus == 23) {
 					editOutline = 3;
 				} else if(focus == 24) {
@@ -851,8 +855,8 @@ public class Main extends LWJGLWindow {
 		glUniformMatrix4(colorArrayProgram.worldToClipMatrix, false, world2clip.fillAndFlipBuffer(mat4Buffer));
         glUniformMatrix4(colorArrayProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
         glUniform4f(colorArrayProgram.dirLight, 0.5f, 0.2f, 1.0f, 1.0f);
-        glUniform4f(colorArrayProgram.dirLightMag, 0.5f, 0.5f, 0.5f, 1.0f);
-        glUniform4f(colorArrayProgram.ambient, 0.5f, 0.5f, 0.5f, 1.0f);
+        glUniform4f(colorArrayProgram.dirLightMag, 0.2f, 0.2f, 0.2f, 1.0f);
+        glUniform4f(colorArrayProgram.ambient, 0.8f, 0.8f, 0.8f, 1.0f);
 		glUseProgram( 0 );
 
 		/************************/
@@ -911,8 +915,8 @@ public class Main extends LWJGLWindow {
 				theModel.render(colorUniformProgram, 0.406f, 0.590f, 0.730f, 1.0f, 1);
 				theModel.render(colorUniformProgram, 0.167f, 0.242f, 0.300f, 1.0f, 2);
 			} else if(viewMode == 1){
-				theModel.render(colorUniformProgram, 0.050f, 0.072f, 0.090f, 1.0f, 0);
-				theModel.render(colorUniformProgram, 0.406f, 0.590f, 0.730f, 1.0f, 1);
+				//theModel.render(colorUniformProgram, 0.050f, 0.072f, 0.090f, 1.0f, 0);
+				//theModel.render(colorUniformProgram, 0.406f, 0.590f, 0.730f, 1.0f, 1);
 				theModel.render(colorArrayProgram);
 			} else {
 				theModel.render(colorUniformProgram, 0.050f, 0.072f, 0.090f, 1.0f, 0);
@@ -987,7 +991,7 @@ public class Main extends LWJGLWindow {
 	protected void onStop() {
 		colorSelection.delete();
 		selection.delete();
-		plane.delete();
+        plane.delete();
 		cursor.destroy();
 		panel.delete();
 		theModel.delete();
@@ -1356,92 +1360,155 @@ public class Main extends LWJGLWindow {
         }
     }
 
-	private void save() {
-		try {
-			File file = new File("save_file.txt");
+    private void save() {
+        try {
+            String fileName = JOptionPane.showInputDialog(null,
+                    "What would you like to name your model?", "Save", JOptionPane.QUESTION_MESSAGE);
+            if(fileName == null || fileName.equals("")) {
+                JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            if(!fileName.matches("[a-zA-Z0-9_-]+")) {
+                JOptionPane.showMessageDialog(null, "Invalid name -- use letters, numbers, dashes, and underscores",
+                        "Status", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
 
-			if (!file.exists()) {
-				file.createNewFile();
-			}
+            File file = new File("models/" + fileName + ".3df");
 
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
+            if (file.exists()) {
+                if(file.isDirectory()) {
+                    JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                int overwrite = JOptionPane.showConfirmDialog(null,
+                        "Overwrite save file?", "File Exists", JOptionPane.YES_NO_OPTION);
+                if(overwrite == JOptionPane.YES_OPTION) {
+                    file.delete();
+                    file.createNewFile();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+            } else {
+                File parentFile = file.getParentFile();
+                parentFile.mkdirs();
+                file.createNewFile();
+            }
 
-			bw.write("Vertices:");
-			ArrayList<Vertex> verts = theModel.getVerts();
-			for(int i=0; i<verts.size(); i++) {
-				if(i % 3 == 0) bw.write("\n");
-				bw.write(verts.get(i) + " ");
-			}
-			bw.write("\nLines:");
-			short[] lines = theModel.getLineIndices();
-			for(int i=0; i<theModel.numLines()*2; i=i+2) {
-				if(i % 24 == 0) bw.write("\n");
-				bw.write(lines[i] + "," + lines[i+1] + " ");
-			}
-			bw.write("\nTriangles:");
-			short[] tris = theModel.getTriIndices();
-			int[] colors = theModel.getColors();
-			for(int i=0; i<theModel.numTris()*3; i=i+3) {
-				if(i % 18 == 0) bw.write("\n");
-				bw.write(tris[i] + "," + tris[i+1] + "," + tris[i+2] + "," + colors[i/3] + " ");
-			}
-			bw.close();
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            bw.write("Vertices:");
+            ArrayList<Vertex> verts = theModel.getVerts();
+            for(int i=0; i<verts.size(); i++) {
+                if(i % 3 == 0) bw.write("\n");
+                bw.write(verts.get(i) + " ");
+            }
+            bw.write("\nLines:");
+            short[] lines = theModel.getLineIndices();
+            for(int i=0; i<theModel.numLines()*2; i=i+2) {
+                if(i % 24 == 0) bw.write("\n");
+                bw.write(lines[i] + "," + lines[i+1] + " ");
+            }
+            bw.write("\nTriangles:");
+            short[] tris = theModel.getTriIndices();
+            int[] colors = theModel.getColors();
+            for(int i=0; i<theModel.numTris()*3; i=i+3) {
+                if(i % 18 == 0) bw.write("\n");
+                bw.write(tris[i] + "," + tris[i+1] + "," + tris[i+2] + "," + colors[i / 3] + " ");
+            }
+            bw.close();
+            JOptionPane.showMessageDialog(null, "Saved Successfully", "Status", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 
 	private void load() {
-		clearSelection();
-		clearColorSelection();
-		theModel.delete();
-		theModel = new Mesh();
-		try {
-			File file = new File("save_file.txt");
-			BufferedReader br = new BufferedReader(new FileReader(file.getAbsoluteFile()));
+        try {
+            File folder = new File("models/");
+            File[] listOfFiles = folder.listFiles();
+            ArrayList<String> fileNames = new ArrayList<>();
 
-			boolean readingVerts = true, readingLines = false;
-			String[] line;
-			String[] item;
-			ArrayList<Vertex> verts = new ArrayList<>(); // for compilation
-			if(br.ready()) br.readLine();
-			while(br.ready()) {
-				line = br.readLine().split("[ ]");
-				if(readingVerts) {
-					if(line[0].equals("Lines:")) {
-						readingVerts = false;
-						readingLines = true;
-						verts = theModel.getVerts();
-					} else {
-						for(int i=0; i<line.length; i++) {
-							item = line[i].split("[,]");
-							theModel.add(new Vertex(Float.parseFloat(item[0]), Float.parseFloat(item[1]), Float.parseFloat(item[2])));
-						}
-					}
-				} else if(readingLines) {
-					if(line[0].equals("Triangles:")) {
-						readingLines = false;
-					} else {
-						for(int i=0; i<line.length; i++) {
-							item = line[i].split("[,]");
-							theModel.add(new Line(verts.get(Short.parseShort(item[0])), verts.get(Short.parseShort(item[1]))));
-						}
-					}
-				} else {
-					for(int i=0; i<line.length; i++) {
-						item = line[i].split("[,]");
-						theModel.add(new Triangle(verts.get(Short.parseShort(item[0])), verts.get(Short.parseShort(item[1])),
-							verts.get(Short.parseShort(item[2])), new ColorData(Integer.parseInt(item[3]))));
-					}
-				}
-			}
+            for (int i = 0; i < listOfFiles.length; i++) {
+                String name = listOfFiles[i].getName();
+                if(name.matches("[a-zA-Z0-9_-]+\\.3df")) {
+                    fileNames.add(name.substring(0, name.length()-4));
+                }
+            }
 
-			br.close();
+            if(fileNames.size() < 1) {
+                JOptionPane.showMessageDialog(null, "No models to load", "Status", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+            String fileName = (String) JOptionPane.showInputDialog(null,
+                    "What model would you like to load?", "Load",
+                    JOptionPane.QUESTION_MESSAGE, null, fileNames.toArray(), fileNames.get(0));
+
+            if(fileName == null || fileName.equals("")) {
+                JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            int overwrite = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to load?\nUnsaved changes will be lost.",
+                    "Load", JOptionPane.YES_NO_OPTION);
+            if(overwrite != JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            clearSelection();
+            clearColorSelection();
+            theModel.delete();
+            theModel = new Mesh();
+
+            File file = new File("models/" + fileName + ".3df");
+            BufferedReader br = new BufferedReader(new FileReader(file.getAbsoluteFile()));
+
+            boolean readingVerts = true, readingLines = false;
+            String[] line;
+            String[] item;
+            ArrayList<Vertex> verts = new ArrayList<>(); // for compilation
+            if (br.ready()) br.readLine();
+            while (br.ready()) {
+                line = br.readLine().split("[ ]");
+                if (readingVerts) {
+                    if (line[0].equals("Lines:")) {
+                        readingVerts = false;
+                        readingLines = true;
+                        verts = theModel.getVerts();
+                    } else {
+                        for (int i = 0; i < line.length; i++) {
+                            item = line[i].split("[,]");
+                            theModel.add(new Vertex(Float.parseFloat(item[0]), Float.parseFloat(item[1]), Float.parseFloat(item[2])));
+                        }
+                    }
+                } else if (readingLines) {
+                    if (line[0].equals("Triangles:")) {
+                        readingLines = false;
+                    } else {
+                        for (int i = 0; i < line.length; i++) {
+                            item = line[i].split("[,]");
+                            theModel.add(new Line(verts.get(Short.parseShort(item[0])), verts.get(Short.parseShort(item[1]))));
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < line.length; i++) {
+                        item = line[i].split("[,]");
+                        theModel.add(new Triangle(verts.get(Short.parseShort(item[0])), verts.get(Short.parseShort(item[1])),
+                                verts.get(Short.parseShort(item[2])), new ColorData(Integer.parseInt(item[3]))));
+                    }
+                }
+            }
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
+        }
 	}
 }
