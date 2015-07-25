@@ -67,6 +67,13 @@ public class Mesh {
 	}
 
 	public Triangle add(Triangle t, boolean force) {
+		t.a.addToNormal(t);
+		t.b.addToNormal(t);
+		t.c.addToNormal(t);
+		updateVertex(t.a);
+		updateVertex(t.b);
+		updateVertex(t.c);
+
 		return indices.add(t, force);
 	}
 
@@ -79,6 +86,13 @@ public class Mesh {
 	}
 
 	public void remove(Triangle t) {
+		t.a.removeFromNormal(t);
+		t.b.removeFromNormal(t);
+		t.c.removeFromNormal(t);
+		updateVertex(t.a);
+		updateVertex(t.b);
+		updateVertex(t.c);
+
 		indices.remove(t);
 	}
 
@@ -86,10 +100,14 @@ public class Mesh {
 		v.x += x;
 		v.y += y;
 		v.z += z;
+		for(Triangle t: v.getTris()) {
+			t.calcNormal();
+		}
 		return updateVertex(v);
 	}
 
 	public boolean updateVertex(Vertex v) {
+		v.calcNormal();
 		return indices.updateVertex(v);
 	}
 
@@ -179,7 +197,29 @@ public class Mesh {
 	}
 
 	public void merge(Vertex from, Vertex to) {
-		indices.merge(from, to);
+		for(Triangle t: indices.getTris()) {
+			if(t.a == from) {
+				remove(t);
+				add(new Triangle(to, t.b, t.c, new ColorData()), false);
+			} else if(t.b == from) {
+				remove(t);
+				add(new Triangle(t.a, to, t.c, new ColorData()), false);
+			} else if(t.c == from) {
+				remove(t);
+				add(new Triangle(t.a, t.b, to, new ColorData()), false);
+			}
+		}
+		for(Line l: indices.getLines()) {
+			if(l.a == from) {
+				remove(l);
+				add(new Line(to, l.b), false);
+			} else if(l.b == from) {
+				remove(l);
+				add(new Line(l.a, to), false);
+			}
+		}
+		remove(from);
+		updateVertex(to);
 	}
 
     public void flipNormal(Triangle t) {

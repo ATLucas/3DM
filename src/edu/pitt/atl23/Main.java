@@ -333,7 +333,7 @@ public class Main extends LWJGLWindow {
 				if(focus == 0) {
 					if (selectionMode == 0) {
 						Vertex selected = theModel.getSelectedVertex(sx, sy, viewerWidth, viewerHeight, 6,
-								camera.getViewMatrix(), camera.getPerspectiveMatrix());
+							camera.getViewMatrix(), camera.getPerspectiveMatrix());
 						if (selected != null) {
 							if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
 								deselectVertex(selected);
@@ -343,7 +343,7 @@ public class Main extends LWJGLWindow {
 						}
 					} else if (selectionMode == 1) {
 						Line selected = theModel.getSelectedLines(sx, sy, viewerWidth, viewerHeight, 6,
-								camera.getViewMatrix(), camera.getPerspectiveMatrix());
+							camera.getViewMatrix(), camera.getPerspectiveMatrix());
 						if (selected != null) {
 							if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
 								deselectLine(selected);
@@ -352,8 +352,7 @@ public class Main extends LWJGLWindow {
 							}
 						}
 					} else if (selectionMode == 2) {
-						Triangle selected = theModel.getSelectedTriangle(sx, sy, viewerWidth, viewerHeight,
-								camera.getViewMatrix(), camera.getPerspectiveMatrix());
+						Triangle selected = theModel.getSelectedTriangle(sx, sy, viewerWidth, viewerHeight, camera.getViewMatrix(), camera.getPerspectiveMatrix());
 						if (selected != null) {
 							if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
 								deselectTriangle(selected);
@@ -995,7 +994,7 @@ public class Main extends LWJGLWindow {
 		// render selection mesh
 		if(viewMode == 1 && selectionMode == 2) {
 			selection.render(colorUniformProgram, 0.793f, 0.375f, 0.176f, 1.0f, 1);
-			if (currentTri != null) {
+			if(currentTri != null) {
 				colorSelection.render(colorUniformProgram, 1f, 0.094f, 0.044f, 1.0f, 1);
 			}
 		} else {

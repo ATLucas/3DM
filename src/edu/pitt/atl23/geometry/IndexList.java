@@ -373,12 +373,6 @@ public class IndexList {
 	}
 
 	public boolean updateVertex(Vertex v) {
-        for(int i=0; i<triAL.size(); i++) {
-            if(triAL.get(i).contains(v)) {
-                triAL.get(i).calcNormal();
-                updateNormal(i);
-            }
-        }
 		return vertexList.updateVertex(v);
 	}
 
@@ -434,35 +428,6 @@ public class IndexList {
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
         return true;
     }
-
-	public void merge(Vertex from, Vertex to) {
-		ArrayList<Triangle> checkTris = new ArrayList<>();
-		checkTris.addAll(triAL);
-		for(Triangle t: checkTris) {
-			if(t.a == from) {
-				remove(t);
-				add(new Triangle(to, t.b, t.c, new ColorData()), false);
-			} else if(t.b == from) {
-				remove(t);
-				add(new Triangle(t.a, to, t.c, new ColorData()), false);
-			} else if(t.c == from) {
-				remove(t);
-				add(new Triangle(t.a, t.b, to, new ColorData()), false);
-			}
-		}
-		ArrayList<Line> checkLines = new ArrayList<>();
-		checkLines.addAll(lineAL);
-		for(Line l: checkLines) {
-			if(l.a == from) {
-				remove(l);
-				add(new Line(to, l.b), false);
-			} else if(l.b == from) {
-				remove(l);
-				add(new Line(l.a, to), false);
-			}
-		}
-		remove(from);
-	}
 
 	public ArrayList<Vertex> getVerts() {
 		ArrayList<Vertex> result = new ArrayList<>();
@@ -681,17 +646,12 @@ public class IndexList {
 	private void loadTriVAO() {
 		glBindVertexArray(triVAO);
 
-        glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 12, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triIBO);
-
-		/*glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
+		glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 24, 0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, false, 24, 12);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triIBO);*/
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triIBO);
 
 		glBindVertexArray(0);
 	}
@@ -701,7 +661,9 @@ public class IndexList {
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 12, 0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 24, 0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, false, 24, 12);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lineIBO);
 
 		glBindVertexArray(0);
@@ -712,7 +674,9 @@ public class IndexList {
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexList.getVBO());
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 12, 0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 24, 0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, false, 24, 12);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pointIBO);
 
 		glBindVertexArray(0);

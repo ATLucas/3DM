@@ -1,5 +1,7 @@
 #version 330
 
+smooth in vec3 normal_interp;
+
 out vec4 outputColor;
 
 uniform vec4 dirLight;
@@ -37,9 +39,16 @@ void main()
 	else
 		value = colors[d].fourth;
 
-	vec4 normWorldSpace = normalize(worldToCamera * vec4(normals[gl_PrimitiveID].xyz, 0.0));
+	//vec4 normWorldSpace = normalize(worldToCamera * vec4(normals[gl_PrimitiveID].xyz, 0.0));
+	vec4 normWorldSpace = normalize(worldToCamera * vec4(normal_interp.xyz, 0.0));
 	float cosAngIncidence = dot(normWorldSpace, dirLight);
 	cosAngIncidence = clamp(cosAngIncidence, 0, 1);
+	if(cosAngIncidence > 0.8)
+    	cosAngIncidence = 1.0;
+    else if(cosAngIncidence > 0.5)
+    	cosAngIncidence = 0.6;
+    else
+    	cosAngIncidence = 0.3;
 
 	float a = (value & 255) / 255.0;
 	float b = ((value >> 8) & 255) / 255.0;

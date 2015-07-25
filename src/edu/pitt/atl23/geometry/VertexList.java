@@ -32,27 +32,33 @@ public class VertexList {
 
 	public void add(Vertex v) {
 		vertAL.add(v);
-		if(verts.length < (vertAL.size())*3) {
+		if(verts.length < (vertAL.size())*6) {
 			// double size of the float array
 			float[] tmp = new float[verts.length*2];
 			System.arraycopy(verts,0,tmp,0,verts.length);
 			verts = tmp;
 			// add new vert
-			int offset = (vertAL.size()-1)*3;
+			int offset = (vertAL.size()-1)*6;
 			verts[offset] = v.x;
 			verts[offset + 1] = v.y;
 			verts[offset + 2] = v.z;
+			verts[offset + 3] = v.nx;
+			verts[offset + 4] = v.ny;
+			verts[offset + 5] = v.nz;
 			// double size of the VBO (with new vert)
 			loadVBO();
 		} else {
 			// add new coords to verts array
-			int offset = (vertAL.size() - 1) * 3;
+			int offset = (vertAL.size() - 1) * 6;
 			verts[offset] = v.x;
 			verts[offset + 1] = v.y;
 			verts[offset + 2] = v.z;
+			verts[offset + 3] = v.nx;
+			verts[offset + 4] = v.ny;
+			verts[offset + 5] = v.nz;
 			// Create temp float buffer
-			vertexBuffer = BufferUtils.createFloatBuffer(3);
-			vertexBuffer.put(new float[]{v.x,v.y,v.z}).flip();
+			vertexBuffer = BufferUtils.createFloatBuffer(6);
+			vertexBuffer.put(new float[]{v.x,v.y,v.z,v.nx,v.ny,v.nz}).flip();
 			// byte offset
 			offset = offset * 4;
 			// load subdata
@@ -63,15 +69,18 @@ public class VertexList {
 	}
 
 	public boolean updateVertex(Vertex v) {
-		int offset = vertAL.indexOf(v)*3;
+		int offset = vertAL.indexOf(v)*6;
 		if(offset < 0) return false;
 		// update verts array
 		verts[offset] = v.x;
 		verts[offset + 1] = v.y;
 		verts[offset + 2] = v.z;
+		verts[offset + 3] = v.nx;
+		verts[offset + 4] = v.ny;
+		verts[offset + 5] = v.nz;
 		// Create temp float buffer
-		vertexBuffer = BufferUtils.createFloatBuffer(3);
-		vertexBuffer.put(new float[]{v.x,v.y,v.z}).flip();
+		vertexBuffer = BufferUtils.createFloatBuffer(6);
+		vertexBuffer.put(new float[]{v.x,v.y,v.z,v.nx,v.ny,v.nz}).flip();
 		// byte offset
 		offset = offset * 4;
 		// load subdata
