@@ -1,14 +1,12 @@
 #version 330
 
-smooth in vec3 normal_interp;
+smooth in vec4 normCamSpace;
 
 out vec4 outputColor;
 
 uniform vec4 dirLight;
 uniform vec4 dirLightMag;
 uniform vec4 ambient;
-
-uniform mat4 worldToCamera;
 
 struct block {
 	int first;
@@ -19,10 +17,6 @@ struct block {
 
 layout (std140) uniform colorBlock {
   block colors[1024];
-};
-
-layout (std140) uniform normalBlock {
-  vec4 normals[4096];
 };
 
 void main()
@@ -39,16 +33,14 @@ void main()
 	else
 		value = colors[d].fourth;
 
-	//vec4 normWorldSpace = normalize(worldToCamera * vec4(normals[gl_PrimitiveID].xyz, 0.0));
-	vec4 normWorldSpace = normalize(worldToCamera * vec4(normal_interp.xyz, 0.0));
-	float cosAngIncidence = dot(normWorldSpace, dirLight);
+	float cosAngIncidence = dot(normCamSpace, dirLight);
 	cosAngIncidence = clamp(cosAngIncidence, 0, 1);
 	if(cosAngIncidence > 0.8)
-    	cosAngIncidence = 1.0;
-    else if(cosAngIncidence > 0.5)
-    	cosAngIncidence = 0.6;
-    else
-    	cosAngIncidence = 0.3;
+		cosAngIncidence = 1.0;
+	else if(cosAngIncidence > 0.5)
+		cosAngIncidence = 0.6;
+	else
+		cosAngIncidence = 0.3;
 
 	float a = (value & 255) / 255.0;
 	float b = ((value >> 8) & 255) / 255.0;

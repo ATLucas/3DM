@@ -19,13 +19,12 @@ public class ShaderProgram {
 	public static String CURRENT_DATAPATH = null;
 
 	public int theProgram;
-	public int modelToWorldMatrix;
-	public int worldToClipMatrix;
-    public int worldToCamera;
+	public int modelToWorld;
+	public int worldToCamera;
+	public int cameraToClip;
 	public int orthogonalMatrix;
 	public int baseColor;
 	public int colorBlock;
-    public int normalBlock;
     public int dirLight;
     public int dirLightMag;
     public int ambient;
@@ -36,16 +35,15 @@ public class ShaderProgram {
 		shaderList.add( loadShader(GL_FRAGMENT_SHADER, fragmentShaderFileName) );
 
 		theProgram = createProgram(shaderList);
-		modelToWorldMatrix = glGetUniformLocation(theProgram, "modelToWorldMatrix");
-		worldToClipMatrix = glGetUniformLocation(theProgram, "worldToClipMatrix" );
-        worldToCamera = glGetUniformLocation(theProgram, "worldToCamera" );
+		modelToWorld = glGetUniformLocation(theProgram, "modelToWorld");
+		worldToCamera = glGetUniformLocation(theProgram, "worldToCamera" );
+		cameraToClip = glGetUniformLocation(theProgram, "cameraToClip" );
 		baseColor = glGetUniformLocation(theProgram, "baseColor" );
         dirLight = glGetUniformLocation(theProgram, "dirLight");
         dirLightMag = glGetUniformLocation(theProgram, "dirLightMag");
         ambient = glGetUniformLocation(theProgram, "ambient");
 
 		colorBlock = glGetUniformBlockIndex(theProgram, "colorBlock");
-        normalBlock = glGetUniformBlockIndex(theProgram, "normalBlock");
 
 		orthogonalMatrix = glGetUniformLocation(theProgram, "orthogonalMatrix");
 	}

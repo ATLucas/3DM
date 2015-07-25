@@ -3,15 +3,16 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 normal;
 
-uniform mat4 worldToClipMatrix;
-uniform mat4 modelToWorldMatrix;
+uniform mat4 modelToWorld;
+uniform mat4 worldToCamera;
+uniform mat4 cameraToClip;
 
-smooth out vec3 normal_interp;
+smooth out vec4 normCamSpace;
 
 void main()
 {
-	vec4 worldCoords = modelToWorldMatrix * vec4(position.xyz, 1);
-	gl_Position = worldToClipMatrix * worldCoords;
+	vec4 worldCoords = modelToWorld * vec4(position.xyz, 1);
+	gl_Position = cameraToClip * worldToCamera * worldCoords;
 
-	normal_interp = normal;
+	normCamSpace = normalize(worldToCamera * vec4(normal.xyz, 0.0));
 }

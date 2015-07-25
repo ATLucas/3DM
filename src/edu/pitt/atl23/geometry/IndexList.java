@@ -30,17 +30,14 @@ public class IndexList {
 	private ArrayList<Line> lineAL;
 	private ArrayList<Triangle> triAL;
 	private ArrayList<ColorData> colorAL;
-    private ArrayList<Vec3> normalAL;
 	private short[] tris, lines, points;
 	private int[] colors;
-    private float[] normals;
 	private int triIBO, lineIBO, pointIBO;
 	private int triVAO, lineVAO, pointVAO;
-	private int colorUBO, normalUBO;
+	private int colorUBO;
 
 	private ShortBuffer indexBuffer;
 	private IntBuffer colorBuffer;
-    private FloatBuffer normalBuffer;
 
 	public IndexList(int size) {
 		if(size < 3) {
@@ -52,12 +49,10 @@ public class IndexList {
 		lines = new short[size*2];
 		points = new short[size];
 		colors = new int[1024];
-        normals = new float[4096];
 		triAL = new ArrayList<>();
 		lineAL = new ArrayList<>();
 		pointAL = new ArrayList<>();
 		colorAL = new ArrayList<>();
-        normalAL = new ArrayList<>();
 
 		triIBO = glGenBuffers();
 		loadTriIBO();
@@ -75,8 +70,6 @@ public class IndexList {
 
 		colorUBO = glGenBuffers();
 		loadColorBuffer();
-        normalUBO = glGenBuffers();
-        loadNormalBuffer();
 	}
 
 	public IndexList() {
@@ -102,21 +95,6 @@ public class IndexList {
 		glBufferSubData(GL_UNIFORM_BUFFER, offset, cb);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		/** End Color **/
-
-        /** Normal **/
-        normalAL.add(t.normal);
-        offset = (normalAL.size()-1)*4;
-        normals[offset] = t.normal.x;
-        normals[offset+1] = t.normal.y;
-        normals[offset+2] = t.normal.z;
-        normals[offset+3] = 0f;
-        FloatBuffer nb = BufferUtils.createFloatBuffer(4);
-        nb.put(new float[]{t.normal.x, t.normal.y, t.normal.z, 0f}).flip();
-        offset *= 4;
-        glBindBuffer(GL_UNIFORM_BUFFER, normalUBO);
-        glBufferSubData(GL_UNIFORM_BUFFER, offset, nb);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
-        /** End Normal **/
 
 		if(tris.length < (triAL.size())*3) {
 			// double size of the float array
@@ -238,18 +216,6 @@ public class IndexList {
 		glBufferSubData(GL_UNIFORM_BUFFER, offset*4, cb);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		/** End Color **/
-
-        /** Normal **/
-        normalAL.remove(offset);
-        offset *= 4;
-        last = normalAL.size()*4;
-        for(int i=offset; i<last; i++) normals[i] = normals[i+4];
-        FloatBuffer nb = BufferUtils.createFloatBuffer(last - offset);
-        nb.put(Arrays.copyOfRange(normals, offset, last)).flip();
-        glBindBuffer(GL_UNIFORM_BUFFER, normalUBO);
-        glBufferSubData(GL_UNIFORM_BUFFER, offset*4, nb);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
-        /** End Normal **/
 
 		offset = (offset/4)*3;
 
@@ -407,27 +373,6 @@ public class IndexList {
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
         return true;
 	}
-
-    public boolean updateNormal(Triangle t) {
-        return updateNormal(triAL.indexOf(t));
-    }
-
-    public boolean updateNormal(int index) {
-        Triangle t = triAL.get(index);
-        normalAL.set(index, t.normal);
-        int offset = index*4;
-        normals[offset] = t.normal.x;
-        normals[offset+1] = t.normal.y;
-        normals[offset+2] = t.normal.z;
-        normals[offset+3] = 0f;
-        FloatBuffer nb = BufferUtils.createFloatBuffer(4);
-        nb.put(new float[]{t.normal.x, t.normal.y, t.normal.z, 0f}).flip();
-        offset *= 4;
-        glBindBuffer(GL_UNIFORM_BUFFER, normalUBO);
-        glBufferSubData(GL_UNIFORM_BUFFER, offset, nb);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
-        return true;
-    }
 
 	public ArrayList<Vertex> getVerts() {
 		ArrayList<Vertex> result = new ArrayList<>();
@@ -691,24 +636,10 @@ public class IndexList {
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
-    private void loadNormalBuffer() {
-        normalBuffer = BufferUtils.createFloatBuffer(normals.length);
-        normalBuffer.put(normals).flip();
-
-        glBindBuffer(GL_UNIFORM_BUFFER, normalUBO);
-        glBufferData(GL_UNIFORM_BUFFER, normalBuffer, GL_DYNAMIC_DRAW);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    }
-
 	public void bindColorBuffer(ShaderProgram program) {
 		glUniformBlockBinding(program.theProgram, program.colorBlock, 0);
 		ARBUniformBufferObject.glBindBufferBase(GL_UNIFORM_BUFFER, 0, colorUBO);
 	}
-
-    public void bindNormalBuffer(ShaderProgram program) {
-        glUniformBlockBinding(program.theProgram, program.normalBlock, 1);
-        ARBUniformBufferObject.glBindBufferBase(GL_UNIFORM_BUFFER, 1, normalUBO);
-    }
 
 	private int distFromLineSegment(int px, int py, float ax, float ay, float bx, float by) {
 		float lengthSquared = distanceSquared(ax, ay, bx, by);

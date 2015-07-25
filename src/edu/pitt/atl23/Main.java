@@ -880,17 +880,19 @@ public class Main extends LWJGLWindow {
 		camera.calcViewMatrix();
 
 		// multiply perspective * view
-		Mat4 world2clip = Mat4.mul(camera.getPerspectiveMatrix(), camera.getViewMatrix());
+		Mat4 cam2clip = camera.getPerspectiveMatrix();
 		Mat4 world2cam = camera.getViewMatrix();
+		Mat4 world2clip = Mat4.mul(cam2clip, world2cam);
 
 		// set uniforms for the 3d shaders
 		glUseProgram(colorUniformProgram.theProgram);
-		glUniformMatrix4(colorUniformProgram.worldToClipMatrix, false, world2clip.fillAndFlipBuffer(mat4Buffer));
+		glUniformMatrix4(colorUniformProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
+		glUniformMatrix4(colorUniformProgram.cameraToClip, false, cam2clip.fillAndFlipBuffer(mat4Buffer));
 		glUseProgram(0);
 
 		glUseProgram(colorArrayProgram.theProgram);
-		glUniformMatrix4(colorArrayProgram.worldToClipMatrix, false, world2clip.fillAndFlipBuffer(mat4Buffer));
 		glUniformMatrix4(colorArrayProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
+		glUniformMatrix4(colorArrayProgram.cameraToClip, false, cam2clip.fillAndFlipBuffer(mat4Buffer));
 		glUniform4f(colorArrayProgram.dirLight, 0.5f, 0.2f, 1.0f, 1.0f);
 		glUniform4f(colorArrayProgram.dirLightMag, 0.2f, 0.2f, 0.2f, 1.0f);
 		glUniform4f(colorArrayProgram.ambient, 0.8f, 0.8f, 0.8f, 1.0f);

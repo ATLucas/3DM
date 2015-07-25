@@ -225,7 +225,6 @@ public class Mesh {
     public void flipNormal(Triangle t) {
         t.flipNormal();
         indices.updateTriangle(t);
-        indices.updateNormal(t);
     }
 
 	public void render(ShaderProgram colorArrProgram) {
@@ -233,10 +232,9 @@ public class Mesh {
 		glUseProgram(colorArrProgram.theProgram);
 		/** Load model matrix **/
 		modelMatrix.fillAndFlipBuffer(mat4Buffer);
-		glUniformMatrix4(colorArrProgram.modelToWorldMatrix, false, mat4Buffer);
+		glUniformMatrix4(colorArrProgram.modelToWorld, false, mat4Buffer);
 		/** Draw triangles **/
 		indices.bindColorBuffer(colorArrProgram);
-        indices.bindNormalBuffer(colorArrProgram);
 		indices.drawTriangles();
 	}
 
@@ -246,7 +244,7 @@ public class Mesh {
 
 		/** Load model matrix **/
 		modelMatrix.fillAndFlipBuffer(mat4Buffer);
-		glUniformMatrix4(program.modelToWorldMatrix, false, mat4Buffer);
+		glUniformMatrix4(program.modelToWorld, false, mat4Buffer);
 
 		/** Set color **/
 		glUniform4f(program.baseColor, red, green, blue, alpha);
