@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import static org.lwjgl.opengl.ARBUniformBufferObject.glGetUniformBlockIndex;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL32.*;
 
 /**
  * Created by Andrew T. Lucas on 3/10/2015.
@@ -25,28 +26,36 @@ public class ShaderProgram {
 	public int orthogonalMatrix;
 	public int baseColor;
 	public int colorBlock;
-    public int dirLight;
+    public int pointLightPos;
+    public int pointLightMag;
+    public int dirLightDir;
     public int dirLightMag;
     public int ambient;
 
-	public ShaderProgram(String vertexShaderFileName, String fragmentShaderFileName) {
+	public ShaderProgram(String vertexShaderFileName, String geometryShaderFileName, String fragmentShaderFileName) {
 		ArrayList<Integer> shaderList = new ArrayList<>();
 		shaderList.add( loadShader(GL_VERTEX_SHADER, vertexShaderFileName) );
+		if(geometryShaderFileName != null) shaderList.add( loadShader(GL_GEOMETRY_SHADER, geometryShaderFileName) );
 		shaderList.add( loadShader(GL_FRAGMENT_SHADER, fragmentShaderFileName) );
 
 		theProgram = createProgram(shaderList);
 		modelToWorld = glGetUniformLocation(theProgram, "modelToWorld");
-		worldToCamera = glGetUniformLocation(theProgram, "worldToCamera" );
+		worldToCamera = glGetUniformLocation(theProgram, "worldToCamera");
 		cameraToClip = glGetUniformLocation(theProgram, "cameraToClip" );
-		baseColor = glGetUniformLocation(theProgram, "baseColor" );
-        dirLight = glGetUniformLocation(theProgram, "dirLight");
+
+        pointLightPos = glGetUniformLocation(theProgram, "pointLightPos");
+        pointLightMag = glGetUniformLocation(theProgram, "pointLightMag");
+        dirLightDir = glGetUniformLocation(theProgram, "dirLightDir");
         dirLightMag = glGetUniformLocation(theProgram, "dirLightMag");
         ambient = glGetUniformLocation(theProgram, "ambient");
 
+		baseColor = glGetUniformLocation(theProgram, "baseColor" );
 		colorBlock = glGetUniformBlockIndex(theProgram, "colorBlock");
 
 		orthogonalMatrix = glGetUniformLocation(theProgram, "orthogonalMatrix");
 	}
+
+
 
 	private int loadShader(int shaderType, String shaderFilename) {
 		String filepath = ShaderProgram.findFileOrThrow( shaderFilename );

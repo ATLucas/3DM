@@ -33,9 +33,9 @@ public class Skeleton {
 		mesh.add(new Line(b.head, b.tail));
 	}
 
-	public void render(ShaderProgram shaderProgram) {
-		mesh.render(shaderProgram, 1.0f, 1.0f, 1.0f, 1.0f, 0);
-		mesh.render(shaderProgram, 1.0f, 1.0f, 1.0f, 1.0f, 1);
+	public void render(ShaderProgram nodeProgram, ShaderProgram boneProgram) {
+		mesh.render(nodeProgram, 1.0f, 1.0f, 1.0f, 1.0f, 0);
+		mesh.render(boneProgram, 1.0f, 1.0f, 1.0f, 1.0f, 1);
 	}
 
 	public void delete() {

@@ -1,10 +1,11 @@
 #version 330
 
-smooth in vec4 normCamSpace;
+in float pointLight;
+in float dirLight;
 
 out vec4 outputColor;
 
-uniform vec4 dirLight;
+uniform vec4 pointLightMag;
 uniform vec4 dirLightMag;
 uniform vec4 ambient;
 
@@ -33,19 +34,19 @@ void main()
 	else
 		value = colors[d].fourth;
 
-	float cosAngIncidence = dot(normCamSpace, dirLight);
-	cosAngIncidence = clamp(cosAngIncidence, 0, 1);
-	if(cosAngIncidence > 0.8)
-		cosAngIncidence = 1.0;
-	else if(cosAngIncidence > 0.5)
-		cosAngIncidence = 0.6;
-	else
-		cosAngIncidence = 0.3;
-
 	float a = (value & 255) / 255.0;
 	float b = ((value >> 8) & 255) / 255.0;
 	float g = ((value >> 16) & 255) / 255.0;
 	float r = ((value >> 24) & 255) / 255.0;
 	vec4 diffuse = vec4(r, g, b, a);
-	outputColor = diffuse * dirLightMag * cosAngIncidence + diffuse * ambient;
+
+	float factor;
+	if(pointLight > 0.6)
+		factor = 1.0;
+	else if(pointLight > 0.1)
+		factor = 0.6;
+	else
+		factor = 0.4;
+
+	outputColor = diffuse * pointLightMag * factor + diffuse * dirLightMag * dirLight + diffuse * ambient;
 }

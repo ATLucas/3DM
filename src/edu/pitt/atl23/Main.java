@@ -45,7 +45,7 @@ public class Main extends LWJGLWindow {
 	private Mesh theModel;
 	private Mesh selection;
 	private Mesh colorSelection;
-	private ShaderProgram colorUniformProgram, colorArrayProgram, colorUniform2DProgram, colorArray2DProgram;
+	private ShaderProgram colorUniformProgram, skeletonProgram, colorArrayProgram, colorUniform2DProgram, colorArray2DProgram;
 	private FloatBuffer mat4Buffer = BufferUtils.createFloatBuffer(16);
 
 	// font
@@ -142,10 +142,11 @@ public class Main extends LWJGLWindow {
 		camera = new Camera(0.5f, 100.0f);
 		cursor = new Cursor();
 		panel = new Panel(guiWidth, guiHeight, cursor);
-		colorUniformProgram = new ShaderProgram("ThreeDim.vert", "ColorUniform.frag");
-		colorArrayProgram = new ShaderProgram("ThreeDim.vert", "ColorArrayLight.frag");
-		colorUniform2DProgram = new ShaderProgram("TwoDim.vert", "ColorUniform.frag");
-		colorArray2DProgram = new ShaderProgram("TwoDim.vert", "ColorArray.frag");
+		colorUniformProgram = new ShaderProgram("ThreeDim.vert", null, "ColorUniform.frag");
+		colorArrayProgram = new ShaderProgram("ThreeDim.vert", null, "ColorArrayLight.frag");
+		colorUniform2DProgram = new ShaderProgram("TwoDim.vert", null, "ColorUniform.frag");
+		colorArray2DProgram = new ShaderProgram("TwoDim.vert", null, "ColorArray.frag");
+        skeletonProgram = new ShaderProgram("Bones.vert", "Bones.geo", "ColorUniform.frag");
 
 		monospacedBold36 = new TrueTypeFont(new Font("Monospaced", Font.BOLD, 36), true);
 		orange = new Color(0.793f, 0.375f, 0.176f);
@@ -884,18 +885,26 @@ public class Main extends LWJGLWindow {
 		Mat4 world2cam = camera.getViewMatrix();
 		Mat4 world2clip = Mat4.mul(cam2clip, world2cam);
 
-		// set uniforms for the 3d shaders
+		// Set uniforms for the 3d shaders
+        // plane and cursor
 		glUseProgram(colorUniformProgram.theProgram);
 		glUniformMatrix4(colorUniformProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
 		glUniformMatrix4(colorUniformProgram.cameraToClip, false, cam2clip.fillAndFlipBuffer(mat4Buffer));
 		glUseProgram(0);
-
+        // skeleton
+        glUseProgram(skeletonProgram.theProgram);
+        glUniformMatrix4(skeletonProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
+        glUniformMatrix4(skeletonProgram.cameraToClip, false, cam2clip.fillAndFlipBuffer(mat4Buffer));
+        glUseProgram(0);
+        // model
 		glUseProgram(colorArrayProgram.theProgram);
 		glUniformMatrix4(colorArrayProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
 		glUniformMatrix4(colorArrayProgram.cameraToClip, false, cam2clip.fillAndFlipBuffer(mat4Buffer));
-		glUniform4f(colorArrayProgram.dirLight, 0.5f, 0.2f, 1.0f, 1.0f);
-		glUniform4f(colorArrayProgram.dirLightMag, 0.2f, 0.2f, 0.2f, 1.0f);
-		glUniform4f(colorArrayProgram.ambient, 0.8f, 0.8f, 0.8f, 1.0f);
+		glUniform4f(colorArrayProgram.pointLightPos, 10f, 10f, 0f, 1.0f);
+		glUniform4f(colorArrayProgram.pointLightMag, 1.0f, 0.8f, 0.7f, 1.0f);
+        glUniform4f(colorArrayProgram.dirLightDir, 1f, 0f, 1f, 1.0f);
+        glUniform4f(colorArrayProgram.dirLightMag, 0.2f, 0.2f, 0.2f, 1.0f);
+		glUniform4f(colorArrayProgram.ambient, 0.5f, 0.5f, 0.5f, 1.0f);
 		glUseProgram( 0 );
 
 		/************************/
@@ -983,7 +992,9 @@ public class Main extends LWJGLWindow {
 			}
 			if(selectionMode == 3) {
 				glDisable(GL_DEPTH_TEST);
-				theModel.renderSkeleton(colorUniformProgram);
+                glDisable(GL_CULL_FACE);
+                theModel.renderSkeleton(colorUniformProgram, skeletonProgram);
+                glEnable(GL_CULL_FACE);
 				glEnable(GL_DEPTH_TEST);
 			}
 		}

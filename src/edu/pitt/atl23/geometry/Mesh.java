@@ -259,8 +259,8 @@ public class Mesh {
 		}
 	}
 
-	public void renderSkeleton(ShaderProgram program) {
-		skeleton.render(program);
+	public void renderSkeleton(ShaderProgram nodeProgram, ShaderProgram boneProgram) {
+		skeleton.render(nodeProgram, boneProgram);
 	}
 
 	public void delete() {
