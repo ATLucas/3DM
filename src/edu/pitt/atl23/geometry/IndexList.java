@@ -326,6 +326,9 @@ public class IndexList {
 		// remove point from point ArrayList
 		pointAL.remove(offset);
 
+		// actually replaced rather than removed
+		vertexList.remove(offset);
+
 		// remove point indices from point array
 		int last = pointAL.size();
 		for(int i=offset; i<last; i++) {
@@ -462,7 +465,9 @@ public class IndexList {
 	}
 
 	public ArrayList<Vertex> getVerts() {
-		return vertexList.getVerts();
+		ArrayList<Vertex> result = new ArrayList<>();
+		result.addAll(pointAL);
+		return result;
 	}
 
 	public ArrayList<Line> getLines() {

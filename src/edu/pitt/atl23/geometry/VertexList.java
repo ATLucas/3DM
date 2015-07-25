@@ -81,11 +81,9 @@ public class VertexList {
 		return true;
 	}
 
-    public ArrayList<Vertex> getVerts(){
-        ArrayList<Vertex> result = new ArrayList<>();
-        result.addAll(vertAL);
-        return result;
-    }
+	public void remove(int offset) {
+		vertAL.set(offset, null);
+	}
 
 	public int getVBO() {
 		return vbo;

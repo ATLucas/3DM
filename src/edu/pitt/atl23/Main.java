@@ -56,62 +56,63 @@ public class Main extends LWJGLWindow {
 	private Triangle currentTri;
 
 	/** 0: viewer
-        1: cursor edit x
-        2: cursor edit y
-        3: cursor edit z
-        4: track x
-        5: track y
-        6: track z
-        7: place
-        8: remove
-        9: merge
-        10: fill
-        11: extrude
-        12: grab/release
-        13: vertex selection
-        14: line selection
-        15: triangle selection
-        16: normal view
-        17: color view
-        18: wireframe view
-        19: hide/show cursor
-        20: save
-        21: load
-        22: shortcuts
-        23: color edit red
-        24: color edit green
-        25: color edit blue
-        26: color edit alpha
-        27: add color
-     **/
+	 1: cursor edit x
+	 2: cursor edit y
+	 3: cursor edit z
+	 4: track x
+	 5: track y
+	 6: track z
+	 7: place
+	 8: remove
+	 9: merge
+	 10: fill
+	 11: extrude
+	 12: grab/release
+	 13: vertex selection
+	 14: line selection
+	 15: triangle selection
+	 16: normal view
+	 17: color view
+	 18: wireframe view
+	 19: hide/show cursor
+	 20: save
+	 21: load
+	 22: shortcuts
+	 23: color edit red
+	 24: color edit green
+	 25: color edit blue
+	 26: color edit alpha
+	 27: add color
+	 **/
 	private int focus;
 
 	/** 0: vertex selection
-        1: line selection
-        2: triangle selection
-     **/
+	 1: line selection
+	 2: triangle selection
+	 3: bone selection
+	 **/
 	private int selectionMode;
 
-    /** 0: normal
-        1: color
-        2: wireframe
-     **/
+	/** 0: normal
+	 1: color
+	 2: wireframe
+	 **/
 	private int viewMode;
 
-    /** 0: x
-        1: y
-        2: z
-        3: red
-        4: green
-        5: blue
-        6: alpha
-     **/
+	/** 0: x
+	 1: y
+	 2: z
+	 3: red
+	 4: green
+	 5: blue
+	 6: alpha
+	 **/
 	private int editOutline;
 
 	/** -1: none
-         0: edit color
-         1: edit cursor
-     **/
+	 0: edit color
+	 1: edit cursor
+	 **/
 	private int currentPane;
 
 	private boolean grabbing;
@@ -120,7 +121,7 @@ public class Main extends LWJGLWindow {
 	private int tickCount;
 
 	public static void main(String[] args) {
-		new Main().start( WIDTH, HEIGHT );
+		new Main().start(WIDTH, HEIGHT);
 	}
 
 	@Override
@@ -155,6 +156,7 @@ public class Main extends LWJGLWindow {
 
 		/** Init the model itself **/
 		theModel = new Mesh();
+		theModel.addSkeleton();
 
 		/********** Initialize meshes **********/
 		Vertex a,b,c,d,e,f,g,h,ua,ub,uc,ud,ue,uf,ug,uh;
@@ -331,7 +333,7 @@ public class Main extends LWJGLWindow {
 				if(focus == 0) {
 					if (selectionMode == 0) {
 						Vertex selected = theModel.getSelectedVertex(sx, sy, viewerWidth, viewerHeight, 6,
-							camera.getViewMatrix(), camera.getPerspectiveMatrix());
+								camera.getViewMatrix(), camera.getPerspectiveMatrix());
 						if (selected != null) {
 							if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
 								deselectVertex(selected);
@@ -339,10 +341,9 @@ public class Main extends LWJGLWindow {
 								selectVertex(selected);
 							}
 						}
-
 					} else if (selectionMode == 1) {
 						Line selected = theModel.getSelectedLines(sx, sy, viewerWidth, viewerHeight, 6,
-							camera.getViewMatrix(), camera.getPerspectiveMatrix());
+								camera.getViewMatrix(), camera.getPerspectiveMatrix());
 						if (selected != null) {
 							if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
 								deselectLine(selected);
@@ -351,12 +352,23 @@ public class Main extends LWJGLWindow {
 							}
 						}
 					} else if (selectionMode == 2) {
-						Triangle selected = theModel.getSelectedTriangle(sx, sy, viewerWidth, viewerHeight, camera.getViewMatrix(), camera.getPerspectiveMatrix());
+						Triangle selected = theModel.getSelectedTriangle(sx, sy, viewerWidth, viewerHeight,
+								camera.getViewMatrix(), camera.getPerspectiveMatrix());
 						if (selected != null) {
 							if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
 								deselectTriangle(selected);
 							} else {
 								selectTriangle(selected);
+							}
+						}
+					} else if (selectionMode == 3) {
+						Vertex selected = theModel.getSelectedBoneEnd(sx, sy, viewerWidth, viewerHeight, 6,
+								camera.getViewMatrix(), camera.getPerspectiveMatrix());
+						if (selected != null) {
+							if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+								deselectVertex(selected);
+							} else {
+								selectVertex(selected);
 							}
 						}
 					}
@@ -400,6 +412,8 @@ public class Main extends LWJGLWindow {
 						removeSelectedLines();
 					} else if(selectionMode == 2) {
 						removeSelectedTriangles();
+					} else if(selectionMode == 3) {
+						removeSelectedBoneNodes();
 					}
 				} else if(focus == 9) {
 					if(selectionMode == 0) {
@@ -439,9 +453,9 @@ public class Main extends LWJGLWindow {
 				} else if(focus == 19) {
 					renderCursor = !renderCursor;
 				} else if(focus == 20) {
-                    save();
+					save();
 				} else if(focus == 21) {
-                    load();
+					load();
 				} else if(focus == 23) {
 					editOutline = 3;
 				} else if(focus == 24) {
@@ -473,7 +487,11 @@ public class Main extends LWJGLWindow {
 				}
 				camera.validate();
 				if(grabbing) {
-					cursor.update(theModel, selection);
+					if(selectionMode == 3) {
+						cursor.update(theModel.getSkeletonMesh(), selection);
+					} else {
+						cursor.update(theModel, selection);
+					}
 				} else {
 					cursor.update();
 				}
@@ -540,15 +558,17 @@ public class Main extends LWJGLWindow {
 
 				switch ( Keyboard.getEventKey() ) {
 					case Keyboard.KEY_SPACE:
+						Vertex v = new Vertex(cursor.getx(), cursor.gety(), cursor.getz());
 						if(selectionMode == 0) {
-							Vertex a = new Vertex(cursor.getx(), cursor.gety(), cursor.getz());
-							theModel.add(a);
+							theModel.add(v);
+						} else if(selectionMode == 3) {
+							theModel.addBoneNode(v);
 						}
 						break;
 					case Keyboard.KEY_TAB:
 						if(focus == 0) {
 							clearSelection();
-							if(selectionMode < 2) {
+							if(selectionMode < 3) {
 								selectionMode++;
 							} else {
 								selectionMode = 0;
@@ -597,7 +617,9 @@ public class Main extends LWJGLWindow {
 							if(currentTri != null) {
 								if (i >= 0 && i < 256) {
 									panel.triColor.r = i;
-									theModel.applyColor(currentTri, new ColorData(i, currentTri.color.g, currentTri.color.b, currentTri.color.a));
+									for(Triangle t: selection.getTris()) {
+										theModel.applyColor(t, new ColorData(i, currentTri.color.g, currentTri.color.b, currentTri.color.a));
+									}
 								}
 							}
 							editOutline++;
@@ -606,7 +628,9 @@ public class Main extends LWJGLWindow {
 							if(currentTri != null) {
 								if (i >= 0 && i < 256) {
 									panel.triColor.g = i;
-									theModel.applyColor(currentTri, new ColorData(currentTri.color.r, i, currentTri.color.b, currentTri.color.a));
+									for(Triangle t: selection.getTris()) {
+										theModel.applyColor(t, new ColorData(currentTri.color.r, i, currentTri.color.b, currentTri.color.a));
+									}
 								}
 							}
 							editOutline++;
@@ -615,7 +639,9 @@ public class Main extends LWJGLWindow {
 							if(currentTri != null) {
 								if (i >= 0 && i < 256) {
 									panel.triColor.b = i;
-									theModel.applyColor(currentTri, new ColorData(currentTri.color.r, currentTri.color.g, i, currentTri.color.a));
+									for(Triangle t: selection.getTris()) {
+										theModel.applyColor(t, new ColorData(currentTri.color.r, currentTri.color.g, i, currentTri.color.a));
+									}
 								}
 							}
 							editOutline++;
@@ -624,7 +650,9 @@ public class Main extends LWJGLWindow {
 							if(currentTri != null) {
 								if (i >= 0 && i < 256) {
 									panel.triColor.a = i;
-									theModel.applyColor(currentTri, new ColorData(currentTri.color.r, currentTri.color.g, currentTri.color.b, i));
+									for(Triangle t: selection.getTris()) {
+										theModel.applyColor(t, new ColorData(currentTri.color.r, currentTri.color.g, currentTri.color.b, i));
+									}
 								}
 							}
 							editOutline = 3;
@@ -653,6 +681,8 @@ public class Main extends LWJGLWindow {
 								fillSelectedVertices();
 							} else if(selectionMode == 1) {
 								fillSelectedLines();
+							} else if(selectionMode == 3) {
+								fillSelectedBoneNodes();
 							}
 						}
 						break;
@@ -664,6 +694,8 @@ public class Main extends LWJGLWindow {
 								removeSelectedLines();
 							} else if(selectionMode == 2) {
 								removeSelectedTriangles();
+							} else if(selectionMode == 3) {
+								removeSelectedBoneNodes();
 							}
 						}
 						break;
@@ -694,11 +726,11 @@ public class Main extends LWJGLWindow {
 							// change tri color
 						}
 						break;
-                    case Keyboard.KEY_N:
-                        if(focus == 0) {
-                            flipNormals();
-                        }
-                        break;
+					case Keyboard.KEY_N:
+						if(focus == 0) {
+							flipNormals();
+						}
+						break;
 					case Keyboard.KEY_ESCAPE:
 						leaveMainLoop();
 						break;
@@ -782,37 +814,39 @@ public class Main extends LWJGLWindow {
 					camera.target.y = camera.target.y + 1.0f * lastFrameDuration;
 					cursor.dy = 1.0f * lastFrameDuration;
 				}
-			}  else if (Keyboard.isKeyDown(Keyboard.KEY_Z)) {
-				ArrayList<Vertex> verts = selection.getVerts();
-				if(focus == 0 && verts.size() > 0) {
-					float avgx = 0;
-					float avgy = 0;
-					float avgz = 0;
-					for (Vertex v : verts) {
-						avgx += v.x;
-						avgy += v.y;
-						avgz += v.z;
-					}
-					avgx /= verts.size();
-					avgy /= verts.size();
-					avgz /= verts.size();
-					for (Vertex v : verts) {
-						Vec3 dir = new Vec3(v.x - avgx, v.y - avgy, v.z - avgz);
-						if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-							if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
-								theModel.moveBy(v, -dir.x * 0.03f * lastFrameDuration, -dir.y * 0.03f * lastFrameDuration, -dir.z * 0.03f * lastFrameDuration);
-								selection.updateVertex(v);
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_Z)) {
+				if(selectionMode < 3) {
+					ArrayList<Vertex> verts = selection.getVerts();
+					if (focus == 0 && verts.size() > 0) {
+						float avgx = 0;
+						float avgy = 0;
+						float avgz = 0;
+						for (Vertex v : verts) {
+							avgx += v.x;
+							avgy += v.y;
+							avgz += v.z;
+						}
+						avgx /= verts.size();
+						avgy /= verts.size();
+						avgz /= verts.size();
+						for (Vertex v : verts) {
+							Vec3 dir = new Vec3(v.x - avgx, v.y - avgy, v.z - avgz);
+							if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+								if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
+									theModel.moveBy(v, -dir.x * 0.03f * lastFrameDuration, -dir.y * 0.03f * lastFrameDuration, -dir.z * 0.03f * lastFrameDuration);
+									selection.updateVertex(v);
+								} else {
+									theModel.moveBy(v, dir.x * 0.03f * lastFrameDuration, dir.y * 0.03f * lastFrameDuration, dir.z * 0.03f * lastFrameDuration);
+									selection.updateVertex(v);
+								}
 							} else {
-								theModel.moveBy(v, dir.x * 0.03f * lastFrameDuration, dir.y * 0.03f * lastFrameDuration, dir.z * 0.03f * lastFrameDuration);
-								selection.updateVertex(v);
-							}
-						} else {
-							if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
-								theModel.moveBy(v, -dir.x * 0.06f * lastFrameDuration, -dir.y * 0.06f * lastFrameDuration, -dir.z * 0.06f * lastFrameDuration);
-								selection.updateVertex(v);
-							} else {
-								theModel.moveBy(v, dir.x * 0.06f * lastFrameDuration, dir.y * 0.06f * lastFrameDuration, dir.z * 0.06f * lastFrameDuration);
-								selection.updateVertex(v);
+								if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
+									theModel.moveBy(v, -dir.x * 0.06f * lastFrameDuration, -dir.y * 0.06f * lastFrameDuration, -dir.z * 0.06f * lastFrameDuration);
+									selection.updateVertex(v);
+								} else {
+									theModel.moveBy(v, dir.x * 0.06f * lastFrameDuration, dir.y * 0.06f * lastFrameDuration, dir.z * 0.06f * lastFrameDuration);
+									selection.updateVertex(v);
+								}
 							}
 						}
 					}
@@ -821,7 +855,11 @@ public class Main extends LWJGLWindow {
 
 			camera.validate();
 			if(grabbing) {
-				cursor.update(theModel, selection);
+				if(selectionMode == 3) {
+					cursor.update(theModel.getSkeletonMesh(), selection);
+				} else {
+					cursor.update(theModel, selection);
+				}
 			} else {
 				cursor.update();
 			}
@@ -844,7 +882,7 @@ public class Main extends LWJGLWindow {
 
 		// multiply perspective * view
 		Mat4 world2clip = Mat4.mul(camera.getPerspectiveMatrix(), camera.getViewMatrix());
-        Mat4 world2cam = camera.getViewMatrix();
+		Mat4 world2cam = camera.getViewMatrix();
 
 		// set uniforms for the 3d shaders
 		glUseProgram(colorUniformProgram.theProgram);
@@ -853,10 +891,10 @@ public class Main extends LWJGLWindow {
 
 		glUseProgram(colorArrayProgram.theProgram);
 		glUniformMatrix4(colorArrayProgram.worldToClipMatrix, false, world2clip.fillAndFlipBuffer(mat4Buffer));
-        glUniformMatrix4(colorArrayProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
-        glUniform4f(colorArrayProgram.dirLight, 0.5f, 0.2f, 1.0f, 1.0f);
-        glUniform4f(colorArrayProgram.dirLightMag, 0.2f, 0.2f, 0.2f, 1.0f);
-        glUniform4f(colorArrayProgram.ambient, 0.8f, 0.8f, 0.8f, 1.0f);
+		glUniformMatrix4(colorArrayProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
+		glUniform4f(colorArrayProgram.dirLight, 0.5f, 0.2f, 1.0f, 1.0f);
+		glUniform4f(colorArrayProgram.dirLightMag, 0.2f, 0.2f, 0.2f, 1.0f);
+		glUniform4f(colorArrayProgram.ambient, 0.8f, 0.8f, 0.8f, 1.0f);
 		glUseProgram( 0 );
 
 		/************************/
@@ -870,45 +908,45 @@ public class Main extends LWJGLWindow {
 		glDepthRange(0.0f, 1.0f);
 		glEnable(GL32.GL_DEPTH_CLAMP);
 		glViewport(xoffset, yoffset, viewerWidth, viewerHeight);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glFrontFace(GL_CW);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CW);
 
 		// render plane
 		plane.render(colorUniformProgram, 0.150f, 0.150f, 0.150f, 1.0f, 2);
-        // render axes
-        glDisable(GL_CULL_FACE);
+		// render axes
+		glDisable(GL_CULL_FACE);
 		if(focus == 0) {
 			axes.render(colorUniformProgram, 0.793f, 0.375f, 0.176f, 1.0f, 2);
 		} else {
 			axes.render(colorUniformProgram, 0.406f, 0.590f, 0.730f, 1.0f, 2);
 		}
-        // render axis labels
+		// render axis labels
 		glUseProgram(0);
 		glDisable(GL_DEPTH_TEST);
 		if(focus == 0) {
 			Vec4 temp = Mat4.mul(world2clip, new Vec4(10.5f, 0.18f, 0.0f, 1f));
 			temp.scale(1 / temp.w);
 			monospacedBold36.drawString(((temp.x + 1) * viewerWidth / 2)+xoffset/2,
-				(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "X", orange);
+					(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "X", orange);
 			temp = Mat4.mul(world2clip, new Vec4(0f, 0.18f, 10.5f, 1f));
 			temp.scale(1 / temp.w);
 			monospacedBold36.drawString(((temp.x + 1) * viewerWidth / 2)+xoffset/2,
-				(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "Z", orange);
+					(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "Z", orange);
 		} else {
 			Vec4 temp = Mat4.mul(world2clip, new Vec4(10.5f, 0.18f, 0.0f, 1f));
 			temp.scale(1 / temp.w);
 			monospacedBold36.drawString(((temp.x + 1) * viewerWidth / 2)+xoffset/2,
-				(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "X", blue);
+					(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "X", blue);
 			temp = Mat4.mul(world2clip, new Vec4(0f, 0.18f, 10.5f, 1f));
 			temp.scale(1 / temp.w);
 			monospacedBold36.drawString(((temp.x + 1) * viewerWidth / 2)+xoffset/2,
-				(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "Z", blue);
+					(viewerHeight - (temp.y + 1) * viewerHeight / 2)+yoffset/2, "Z", blue);
 		}
 		glEnable(GL_DEPTH_TEST);
-        // render model
+		// render model
 		glDisable(GL_BLEND);
-        glEnable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
 		if(selectionMode == 0){
 			if(viewMode == 0) {
 				theModel.render(colorUniformProgram, 0.050f, 0.072f, 0.090f, 1.0f, 0);
@@ -942,16 +980,22 @@ public class Main extends LWJGLWindow {
 			} else {
 				theModel.render(colorUniformProgram, 0.406f, 0.590f, 0.730f, 1.0f, 1);
 			}
+			if(selectionMode == 3) {
+				glDisable(GL_DEPTH_TEST);
+				theModel.renderSkeleton(colorUniformProgram);
+				glEnable(GL_DEPTH_TEST);
+			}
 		}
-        // render cursor
-        glDisable(GL_CULL_FACE);
+
+		// render cursor
+		glDisable(GL_CULL_FACE);
 		if(renderCursor) {
 			cursor.render(colorUniformProgram);
 		}
-        // render selection mesh
+		// render selection mesh
 		if(viewMode == 1 && selectionMode == 2) {
 			selection.render(colorUniformProgram, 0.793f, 0.375f, 0.176f, 1.0f, 1);
-			if(currentTri != null) {
+			if (currentTri != null) {
 				colorSelection.render(colorUniformProgram, 1f, 0.094f, 0.044f, 1.0f, 1);
 			}
 		} else {
@@ -984,14 +1028,14 @@ public class Main extends LWJGLWindow {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
-		glUseProgram( 0 );
+		glUseProgram(0);
 	}
 
 	@Override
 	protected void onStop() {
 		colorSelection.delete();
 		selection.delete();
-        plane.delete();
+		plane.delete();
 		cursor.destroy();
 		panel.delete();
 		theModel.delete();
@@ -1177,7 +1221,7 @@ public class Main extends LWJGLWindow {
 	}
 
 	private void selectTriangle(Triangle t){
-        t.refreshLines();
+		t.refreshLines();
 		t.a = selection.add(t.a);
 		t.b = selection.add(t.b);
 		t.c = selection.add(t.c);
@@ -1351,164 +1395,187 @@ public class Main extends LWJGLWindow {
 		grabbing = true;
 	}
 
-    private void flipNormals() {
-        ArrayList<Triangle> tris = selection.getTris();
-        clearSelection();
+	private void flipNormals() {
+		ArrayList<Triangle> tris = selection.getTris();
+		clearSelection();
 
-        for(Triangle t: tris) {
-            theModel.flipNormal(t);
-        }
-    }
+		for(Triangle t: tris) {
+			theModel.flipNormal(t);
+		}
+	}
 
-    private void save() {
-        try {
-            String fileName = JOptionPane.showInputDialog(null,
-                    "What would you like to name your model?", "Save", JOptionPane.QUESTION_MESSAGE);
-            if(fileName == null || fileName.equals("")) {
-                JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            if(!fileName.matches("[a-zA-Z0-9_-]+")) {
-                JOptionPane.showMessageDialog(null, "Invalid name -- use letters, numbers, dashes, and underscores",
-                        "Status", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
+	private void fillSelectedBoneNodes() {
+		ArrayList<Vertex> verts = selection.getVerts();
+		if(verts.size() < 2) {
+			clearSelection();
+			return;
+		}
+		Vertex previousVert = verts.remove(0);
+		for(Vertex v : verts) {
+			theModel.addBone(previousVert, v);
+			previousVert = v;
+		}
+		clearSelection();
+	}
 
-            File file = new File("models/" + fileName + ".3df");
+	private void removeSelectedBoneNodes() {
+		ArrayList<Vertex> verts = selection.getVerts();
+		for(Vertex v: verts) {
+			theModel.removeBoneNode(v);
+		}
+		clearSelection();
+	}
 
-            if (file.exists()) {
-                if(file.isDirectory()) {
-                    JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
-                int overwrite = JOptionPane.showConfirmDialog(null,
-                        "Overwrite save file?", "File Exists", JOptionPane.YES_NO_OPTION);
-                if(overwrite == JOptionPane.YES_OPTION) {
-                    file.delete();
-                    file.createNewFile();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
-            } else {
-                File parentFile = file.getParentFile();
-                parentFile.mkdirs();
-                file.createNewFile();
-            }
+	private void save() {
+		try {
+			String fileName = JOptionPane.showInputDialog(null,
+					"What would you like to name your model?", "Save", JOptionPane.QUESTION_MESSAGE);
+			if(fileName == null || fileName.equals("")) {
+				JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+			if(!fileName.matches("[a-zA-Z0-9_-]+")) {
+				JOptionPane.showMessageDialog(null, "Invalid name -- use letters, numbers, dashes, and underscores",
+						"Status", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
 
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
+			File file = new File("models/" + fileName + ".3df");
 
-            bw.write("Vertices:");
-            ArrayList<Vertex> verts = theModel.getVerts();
-            for(int i=0; i<verts.size(); i++) {
-                if(i % 3 == 0) bw.write("\n");
-                bw.write(verts.get(i) + " ");
-            }
-            bw.write("\nLines:");
-            short[] lines = theModel.getLineIndices();
-            for(int i=0; i<theModel.numLines()*2; i=i+2) {
-                if(i % 24 == 0) bw.write("\n");
-                bw.write(lines[i] + "," + lines[i+1] + " ");
-            }
-            bw.write("\nTriangles:");
-            short[] tris = theModel.getTriIndices();
-            int[] colors = theModel.getColors();
-            for(int i=0; i<theModel.numTris()*3; i=i+3) {
-                if(i % 18 == 0) bw.write("\n");
-                bw.write(tris[i] + "," + tris[i+1] + "," + tris[i+2] + "," + colors[i / 3] + " ");
-            }
-            bw.close();
-            JOptionPane.showMessageDialog(null, "Saved Successfully", "Status", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
-            e.printStackTrace();
-        }
-    }
+			if (file.exists()) {
+				if(file.isDirectory()) {
+					JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				int overwrite = JOptionPane.showConfirmDialog(null,
+						"Overwrite save file?", "File Exists", JOptionPane.YES_NO_OPTION);
+				if(overwrite == JOptionPane.YES_OPTION) {
+					file.delete();
+					file.createNewFile();
+				} else {
+					JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			} else {
+				File parentFile = file.getParentFile();
+				parentFile.mkdirs();
+				file.createNewFile();
+			}
+
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			bw.write("Vertices:");
+			ArrayList<Vertex> verts = theModel.getVerts();
+			for(int i=0; i<verts.size(); i++) {
+				if(i % 3 == 0) bw.write("\n");
+				bw.write(verts.get(i) + " ");
+			}
+			bw.write("\nLines:");
+			short[] lines = theModel.getLineIndices();
+			for(int i=0; i<theModel.numLines()*2; i=i+2) {
+				if(i % 24 == 0) bw.write("\n");
+				bw.write(lines[i] + "," + lines[i+1] + " ");
+			}
+			bw.write("\nTriangles:");
+			short[] tris = theModel.getTriIndices();
+			int[] colors = theModel.getColors();
+			for(int i=0; i<theModel.numTris()*3; i=i+3) {
+				if(i % 18 == 0) bw.write("\n");
+				bw.write(tris[i] + "," + tris[i+1] + "," + tris[i+2] + "," + colors[i / 3] + " ");
+			}
+			bw.close();
+			JOptionPane.showMessageDialog(null, "Saved Successfully", "Status", JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Not Saved", "Status", JOptionPane.INFORMATION_MESSAGE);
+			e.printStackTrace();
+		}
+	}
 
 	private void load() {
-        try {
-            File folder = new File("models/");
-            File[] listOfFiles = folder.listFiles();
-            ArrayList<String> fileNames = new ArrayList<>();
+		try {
+			File folder = new File("models/");
+			File[] listOfFiles = folder.listFiles();
+			ArrayList<String> fileNames = new ArrayList<>();
 
-            for (int i = 0; i < listOfFiles.length; i++) {
-                String name = listOfFiles[i].getName();
-                if(name.matches("[a-zA-Z0-9_-]+\\.3df")) {
-                    fileNames.add(name.substring(0, name.length()-4));
-                }
-            }
+			for (int i = 0; i < listOfFiles.length; i++) {
+				String name = listOfFiles[i].getName();
+				if(name.matches("[a-zA-Z0-9_-]+\\.3df")) {
+					fileNames.add(name.substring(0, name.length()-4));
+				}
+			}
 
-            if(fileNames.size() < 1) {
-                JOptionPane.showMessageDialog(null, "No models to load", "Status", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
+			if(fileNames.size() < 1) {
+				JOptionPane.showMessageDialog(null, "No models to load", "Status", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
 
-            String fileName = (String) JOptionPane.showInputDialog(null,
-                    "What model would you like to load?", "Load",
-                    JOptionPane.QUESTION_MESSAGE, null, fileNames.toArray(), fileNames.get(0));
+			String fileName = (String) JOptionPane.showInputDialog(null,
+					"What model would you like to load?", "Load",
+					JOptionPane.QUESTION_MESSAGE, null, fileNames.toArray(), fileNames.get(0));
 
-            if(fileName == null || fileName.equals("")) {
-                JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
+			if(fileName == null || fileName.equals("")) {
+				JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
 
-            int overwrite = JOptionPane.showConfirmDialog(null,
-                    "Are you sure you want to load?\nUnsaved changes will be lost.",
-                    "Load", JOptionPane.YES_NO_OPTION);
-            if(overwrite != JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
+			int overwrite = JOptionPane.showConfirmDialog(null,
+					"Are you sure you want to load?\nUnsaved changes will be lost.",
+					"Load", JOptionPane.YES_NO_OPTION);
+			if(overwrite != JOptionPane.YES_OPTION) {
+				JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
 
-            clearSelection();
-            clearColorSelection();
-            theModel.delete();
-            theModel = new Mesh();
+			clearSelection();
+			clearColorSelection();
+			theModel.delete();
+			theModel = new Mesh();
+			theModel.addSkeleton();
 
-            File file = new File("models/" + fileName + ".3df");
-            BufferedReader br = new BufferedReader(new FileReader(file.getAbsoluteFile()));
+			File file = new File("models/" + fileName + ".3df");
+			BufferedReader br = new BufferedReader(new FileReader(file.getAbsoluteFile()));
 
-            boolean readingVerts = true, readingLines = false;
-            String[] line;
-            String[] item;
-            ArrayList<Vertex> verts = new ArrayList<>(); // for compilation
-            if (br.ready()) br.readLine();
-            while (br.ready()) {
-                line = br.readLine().split("[ ]");
-                if (readingVerts) {
-                    if (line[0].equals("Lines:")) {
-                        readingVerts = false;
-                        readingLines = true;
-                        verts = theModel.getVerts();
-                    } else {
-                        for (int i = 0; i < line.length; i++) {
-                            item = line[i].split("[,]");
-                            theModel.add(new Vertex(Float.parseFloat(item[0]), Float.parseFloat(item[1]), Float.parseFloat(item[2])));
-                        }
-                    }
-                } else if (readingLines) {
-                    if (line[0].equals("Triangles:")) {
-                        readingLines = false;
-                    } else {
-                        for (int i = 0; i < line.length; i++) {
-                            item = line[i].split("[,]");
-                            theModel.add(new Line(verts.get(Short.parseShort(item[0])), verts.get(Short.parseShort(item[1]))));
-                        }
-                    }
-                } else {
-                    for (int i = 0; i < line.length; i++) {
-                        item = line[i].split("[,]");
-                        theModel.add(new Triangle(verts.get(Short.parseShort(item[0])), verts.get(Short.parseShort(item[1])),
-                                verts.get(Short.parseShort(item[2])), new ColorData(Integer.parseInt(item[3]))));
-                    }
-                }
-            }
-            br.close();
+			boolean readingVerts = true, readingLines = false;
+			String[] line;
+			String[] item;
+			ArrayList<Vertex> verts = new ArrayList<>(); // for compilation
+			if (br.ready()) br.readLine();
+			while (br.ready()) {
+				line = br.readLine().split("[ ]");
+				if (readingVerts) {
+					if (line[0].equals("Lines:")) {
+						readingVerts = false;
+						readingLines = true;
+						verts = theModel.getVerts();
+					} else {
+						for (int i = 0; i < line.length; i++) {
+							item = line[i].split("[,]");
+							theModel.add(new Vertex(Float.parseFloat(item[0]), Float.parseFloat(item[1]), Float.parseFloat(item[2])));
+						}
+					}
+				} else if (readingLines) {
+					if (line[0].equals("Triangles:")) {
+						readingLines = false;
+					} else {
+						for (int i = 0; i < line.length; i++) {
+							item = line[i].split("[,]");
+							theModel.add(new Line(verts.get(Short.parseShort(item[0])), verts.get(Short.parseShort(item[1]))));
+						}
+					}
+				} else {
+					for (int i = 0; i < line.length; i++) {
+						item = line[i].split("[,]");
+						theModel.add(new Triangle(verts.get(Short.parseShort(item[0])), verts.get(Short.parseShort(item[1])),
+								verts.get(Short.parseShort(item[2])), new ColorData(Integer.parseInt(item[3]))));
+					}
+				}
+			}
+			br.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
-        }
+		} catch (IOException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Not Loaded", "Status", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 }

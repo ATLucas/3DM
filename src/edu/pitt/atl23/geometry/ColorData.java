@@ -1,6 +1,6 @@
 package edu.pitt.atl23.geometry;
 
-import java.util.Random;
+import java.nio.ByteBuffer;
 
 /**
  * Created by Andrew T. Lucas on 6/20/2015.
@@ -26,15 +26,14 @@ public class ColorData {
 
 	public ColorData(int iv) {
 		intVal = iv;
-		r = iv >>> 12;
-		g = (iv >>> 8) & 0x000000FF;
-		b = (iv >>> 4) & 0x000000FF;
-		a = iv & 0x000000FF;
+		byte[] bytes = ByteBuffer.allocate(4).putInt(iv).array();
+		r = bytes[0] & 0xFF;
+		g = bytes[1] & 0xFF;
+		b = bytes[2] & 0xFF;
+		a = bytes[3] & 0xFF;
 	}
 
 	public ColorData() {
-		//Random rand = new Random(System.nanoTime());
-		//int val = rand.nextInt(150) + 50;
 		r = 50;
 		g = 50;
 		b = 100;

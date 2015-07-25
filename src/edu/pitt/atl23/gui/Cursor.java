@@ -19,6 +19,7 @@ public class Cursor {
 		dx = 0;
 		dy = 0;
 		dz = 0;
+
 		Vertex a,b,c,d,e,f,g,h,i,j,k,l;
 		
 		// points on diamond

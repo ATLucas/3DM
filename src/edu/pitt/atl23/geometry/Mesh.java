@@ -18,10 +18,32 @@ public class Mesh {
 	private Mat4 modelMatrix;
 	private FloatBuffer mat4Buffer;
 
+	private Skeleton skeleton;
+
 	public Mesh() {
 		indices = new IndexList();
 		modelMatrix = new Mat4();
 		mat4Buffer = BufferUtils.createFloatBuffer(64);
+	}
+
+	public void addSkeleton() {
+		skeleton = new Skeleton(new Vertex(0f, 0f, 0f));
+	}
+
+	public void addBoneNode(Vertex v) {
+		skeleton.addBoneNode(v);
+	}
+
+	public void removeBoneNode(Vertex v) {
+		skeleton.removeBoneNode(v);
+	}
+
+	public void addBone(Vertex v, Vertex w) {
+		skeleton.addBone(v, w);
+	}
+
+	public Mesh getSkeletonMesh() {
+		return skeleton.mesh;
 	}
 
 	public Vertex add(Vertex v) {
@@ -61,18 +83,9 @@ public class Mesh {
 	}
 
 	public boolean moveBy(Vertex v, float x, float y, float z) {
-		if(indices.getEquivalent(new Vertex(v.x+x,v.y+y,v.z+z)) != null) return false;
 		v.x += x;
 		v.y += y;
 		v.z += z;
-		return updateVertex(v);
-	}
-
-	public boolean moveTo(Vertex v, float x, float y, float z) {
-		if(indices.getEquivalent(new Vertex(v.x+x,v.y+y,v.z+z)) != null) return false;
-		v.x = x;
-		v.y = y;
-		v.z = z;
 		return updateVertex(v);
 	}
 
@@ -161,6 +174,10 @@ public class Mesh {
 		return indices.getSelectedTriangle(mouseX, mouseY, screenWidth, screenHeight, viewMat, perspMat);
 	}
 
+	public Vertex getSelectedBoneEnd(int mouseX, int mouseY, int screenWidth, int screenHeight, int maxDistance, Mat4 viewMat, Mat4 perspMat) {
+		return skeleton.mesh.indices.getSelectedVertex(mouseX, mouseY, screenWidth, screenHeight, maxDistance, viewMat, perspMat);
+	}
+
 	public void merge(Vertex from, Vertex to) {
 		indices.merge(from, to);
 	}
@@ -195,17 +212,22 @@ public class Mesh {
 		glUniform4f(program.baseColor, red, green, blue, alpha);
 
 		/** Draw **/
-		if(geometry == 0) {
+		if(geometry == 0 || geometry == 3) {
 			indices.drawPoints();
 		} else if(geometry == 1) {
 			indices.drawLines();
-		}else if(geometry == 2) {
+		} else if(geometry == 2) {
 			indices.drawTriangles();
 		}
+	}
+
+	public void renderSkeleton(ShaderProgram program) {
+		skeleton.render(program);
 	}
 
 	public void delete() {
 		glDisableVertexAttribArray(0);
 		indices.delete();
+		if(skeleton != null) skeleton.delete();
 	}
 }
