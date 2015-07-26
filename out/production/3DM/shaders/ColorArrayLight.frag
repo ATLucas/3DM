@@ -1,13 +1,22 @@
 #version 330
 
-in float pointLight;
-in float dirLight;
+in vec4 pos_interp;
+in vec4 normal_interp;
+flat in vec4 normal_flat;
 
 out vec4 outputColor;
 
-uniform vec4 pointLightMag;
+uniform vec4 pointLightPos;
+uniform vec4 pointLightColor;
+uniform vec4 dirLightDir;
 uniform vec4 dirLightMag;
 uniform vec4 ambient;
+
+uniform float pointLightRadius;
+uniform float pointLightFade;
+
+uniform float maxIntensity;
+uniform float gamma;
 
 struct block {
 	int first;
@@ -40,13 +49,29 @@ void main()
 	float r = ((value >> 24) & 255) / 255.0;
 	vec4 diffuse = vec4(r, g, b, a);
 
-	float factor;
-	if(pointLight > 0.6)
-		factor = 1.0;
-	else if(pointLight > 0.1)
-		factor = 0.6;
-	else
-		factor = 0.4;
+	float dirLight = dot(normal_interp, dirLightDir);
+	dirLight = clamp(dirLight, 0, 1) * dirLightMag;
 
-	outputColor = diffuse * pointLightMag * factor + diffuse * dirLightMag * dirLight + diffuse * ambient;
+	vec4 pointLightDiff = pointLightPos - pos_interp;
+	float dist = length(pointLightDiff);
+
+	float pointLightMag = clamp(1.0 - dist*dist/(pointLightRadius*pointLightRadius), 0.0, 1.0);
+	pointLightMag *= pointLightMag;
+
+    float pointLight = pointLightFade * dot(normal_interp, normalize(pointLightDiff)) * pointLightMag;
+    pointLight = clamp(pointLight, 0, 1);
+
+	float celFactor = 0;
+	if(pointLight > 0.6)
+		celFactor = 0.6;
+	else if(pointLight > 0.3)
+		celFactor = pointLight;
+	else if(pointLight > 0.1)
+		celFactor = 0.3;
+	else
+		celFactor = pointLight * 3;
+
+	//vec4 accumLighting = (pointLightColor + diffuse) * pointLight + diffuse * dirLight + diffuse * ambient;
+	vec4 accumLighting = pointLightColor * celFactor + diffuse * dirLight + diffuse * ambient;
+    outputColor = pow(accumLighting, vec4(gamma, gamma, gamma, 1.0));
 }

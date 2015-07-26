@@ -32,12 +32,16 @@ public class Triangle {
 
 	public void calcNormal() {
 		normal = Vec3.cross( new Vec3(c.x-a.x,c.y-a.y,c.z-a.z), new Vec3(b.x-a.x,b.y-a.y,b.z-a.z));
+        a.calcNormal();
+        b.calcNormal();
+        c.calcNormal();
 	}
 
     public void flipNormal() {
         Vertex temp = b;
         b = c;
         c = temp;
+        refreshLines();
         calcNormal();
     }
 

@@ -224,6 +224,9 @@ public class Mesh {
 
     public void flipNormal(Triangle t) {
         t.flipNormal();
+        updateVertex(t.a);
+        updateVertex(t.b);
+        updateVertex(t.c);
         indices.updateTriangle(t);
     }
 

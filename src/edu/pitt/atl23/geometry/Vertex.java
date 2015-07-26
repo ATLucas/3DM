@@ -21,6 +21,7 @@ public class Vertex {
 	}
 
 	public void addToNormal(Triangle t) {
+        if(tris.indexOf(t) > -1) return;
 		tris.add(t);
 		calcNormal();
 	}
@@ -31,6 +32,9 @@ public class Vertex {
 	}
 
 	public void calcNormal() {
+        nx = 0;
+        ny = 0;
+        nz = 0;
 		for(Triangle t: tris) {
 			nx += t.normal.x;
 			ny += t.normal.y;

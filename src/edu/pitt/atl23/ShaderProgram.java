@@ -19,18 +19,21 @@ public class ShaderProgram {
 	public static String COMMON_DATAPATH = "/shaders/";
 	public static String CURRENT_DATAPATH = null;
 
-	public int theProgram;
-	public int modelToWorld;
-	public int worldToCamera;
-	public int cameraToClip;
-	public int orthogonalMatrix;
-	public int baseColor;
-	public int colorBlock;
+    public int theProgram;
+    public int modelToWorld;
+    public int worldToCamera;
+    public int cameraToClip;
+    public int orthogonalMatrix;
+    public int baseColor;
+    public int colorBlock;
     public int pointLightPos;
-    public int pointLightMag;
+    public int pointLightColor;
+    public int pointLightRadius;
+    public int pointLightFade;
     public int dirLightDir;
     public int dirLightMag;
     public int ambient;
+    public int gamma;
 
 	public ShaderProgram(String vertexShaderFileName, String geometryShaderFileName, String fragmentShaderFileName) {
 		ArrayList<Integer> shaderList = new ArrayList<>();
@@ -44,10 +47,13 @@ public class ShaderProgram {
 		cameraToClip = glGetUniformLocation(theProgram, "cameraToClip" );
 
         pointLightPos = glGetUniformLocation(theProgram, "pointLightPos");
-        pointLightMag = glGetUniformLocation(theProgram, "pointLightMag");
+        pointLightColor = glGetUniformLocation(theProgram, "pointLightColor");
+        pointLightRadius = glGetUniformLocation(theProgram, "pointLightRadius");
+        pointLightFade = glGetUniformLocation(theProgram, "pointLightFade");
         dirLightDir = glGetUniformLocation(theProgram, "dirLightDir");
         dirLightMag = glGetUniformLocation(theProgram, "dirLightMag");
         ambient = glGetUniformLocation(theProgram, "ambient");
+        gamma = glGetUniformLocation(theProgram, "gamma");
 
 		baseColor = glGetUniformLocation(theProgram, "baseColor" );
 		colorBlock = glGetUniformBlockIndex(theProgram, "colorBlock");

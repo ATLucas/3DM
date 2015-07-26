@@ -77,6 +77,11 @@ public class IndexList {
 	}
 
 	public Triangle add(Triangle t, boolean force) {
+        if(triAL.size() >= 1024) {
+            System.err.println("TOO MANY TRIANGLES");
+            return null;
+        }
+
 		if(!force) {
 			for (Triangle tri : triAL) {
 				if (t.equals(tri)) return tri;
@@ -169,7 +174,7 @@ public class IndexList {
 				if (ve.equals(v)) return ve;
 			}
 		}
-		vertexList.add(v);
+		v = vertexList.add(v);
 		pointAL.add(v);
 		if(points.length < (pointAL.size())) {
 			// double size of the float array
@@ -178,13 +183,13 @@ public class IndexList {
 			points = tmp;
 			// add new vert
 			int offset = (pointAL.size()-1);
-			points[offset] = (short)(vertexList.size()-1);
+			points[offset] = (short)(vertexList.indexOf(v));
 			// double size of the IBO (with new vert)
 			loadPointIBO();
 		} else {
 			// add new vert
 			int offset = (pointAL.size()-1);
-			points[offset] = (short)(vertexList.size()-1);
+			points[offset] = (short)(vertexList.indexOf(v));
 			// Create temp short buffer
 			indexBuffer = BufferUtils.createShortBuffer(1);
 			indexBuffer.put(new short[]{points[offset]}).flip();
@@ -217,7 +222,7 @@ public class IndexList {
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		/** End Color **/
 
-		offset = (offset/4)*3;
+		offset = offset*3;
 
 		// remove tri indices from tri array
 		last = triAL.size()*3;
@@ -292,7 +297,7 @@ public class IndexList {
 		// remove point from point ArrayList
 		pointAL.remove(offset);
 
-		// actually replaced rather than removed
+		// assigns null
 		vertexList.remove(offset);
 
 		// remove point indices from point array
@@ -345,7 +350,7 @@ public class IndexList {
     public boolean updateTriangle(Triangle t) {
         int offset = triAL.indexOf(t)*3;
         if(offset < 0) return false;
-        // update verts array
+        // update tris array
         tris[offset] = (short)vertexList.indexOf(t.a);
         tris[offset + 1] = (short)vertexList.indexOf(t.b);
         tris[offset + 2] = (short)vertexList.indexOf(t.c);

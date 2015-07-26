@@ -7,11 +7,9 @@ uniform mat4 modelToWorld;
 uniform mat4 worldToCamera;
 uniform mat4 cameraToClip;
 
-uniform vec4 pointLightPos;
-uniform vec4 dirLightDir;
-
-out float pointLight;
-out float dirLight;
+out vec4 pos_interp;
+out vec4 normal_interp;
+flat out vec4 normal_flat;
 
 void main()
 {
@@ -19,10 +17,7 @@ void main()
 	vec4 positionCamSpace = worldToCamera * positionWorldSpace;
 	gl_Position = cameraToClip * positionCamSpace;
 
-	vec4 dirToLight = normalize(pointLightPos - positionWorldSpace);
-	pointLight = dot(vec4(normal.xyz, 0.0), dirToLight);
-	pointLight = clamp(pointLight, 0, 1);
-
-	dirLight = dot(vec4(normal, 0.0), dirLightDir);
-	dirLight = clamp(dirLight, 0, 1);
+	pos_interp = positionWorldSpace;
+	normal_interp = vec4(normal, 0.0);
+	normal_flat = vec4(normal, 0.0);
 }

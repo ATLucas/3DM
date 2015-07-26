@@ -30,7 +30,9 @@ public class VertexList {
 		this(12);
 	}
 
-	public void add(Vertex v) {
+	public Vertex add(Vertex v) {
+        int index = indexOf(v);
+        if(index > -1) return vertAL.get(index);
 		vertAL.add(v);
 		if(verts.length < (vertAL.size())*6) {
 			// double size of the float array
@@ -66,6 +68,7 @@ public class VertexList {
 			GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, offset, vertexBuffer);
 			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		}
+        return v;
 	}
 
 	public boolean updateVertex(Vertex v) {

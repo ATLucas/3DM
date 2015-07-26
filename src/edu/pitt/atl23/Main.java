@@ -432,7 +432,9 @@ public class Main extends LWJGLWindow {
 						extrudeSelectedLines();
 					} else if(selectionMode == 2) {
 						extrudeSelectedTriangles();
-					}
+					} else if(selectionMode == 3) {
+                        extrudeSelectedBoneNodes();
+                    }
 				} else if(focus == 12) {
 					grabbing = !grabbing;
 				} else if(focus == 13) {
@@ -686,6 +688,11 @@ public class Main extends LWJGLWindow {
 							}
 						}
 						break;
+                    case Keyboard.KEY_G:
+                        if(focus == 0) {
+                            grabbing = !grabbing;
+                        }
+                        break;
 					case Keyboard.KEY_R:
 						if(focus == 0) {
 							if(selectionMode == 0) {
@@ -707,7 +714,9 @@ public class Main extends LWJGLWindow {
 								extrudeSelectedLines();
 							} else if(selectionMode == 2) {
 								extrudeSelectedTriangles();
-							}
+							} else if(selectionMode == 3) {
+                                extrudeSelectedBoneNodes();
+                            }
 						}
 						break;
 					case Keyboard.KEY_V:
@@ -720,11 +729,28 @@ public class Main extends LWJGLWindow {
 						}
 						break;
 					case Keyboard.KEY_C:
-						if(Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
-							renderCursor = !renderCursor;
-						} else {
-							// change tri color
-						}
+                        if(Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
+                            clearSelection();
+                        } else {
+                            clearSelection();
+                            if(selectionMode == 0) {
+                                for(Vertex vert: theModel.getVerts()) {
+                                    selectVertex(vert);
+                                }
+                            } else if(selectionMode == 1) {
+                                for(Line line: theModel.getLines()) {
+                                    selectLine(line);
+                                }
+                            } else if(selectionMode == 2) {
+                                for(Triangle tri: theModel.getTris()) {
+                                    selectTriangle(tri);
+                                }
+                            } else {
+                                for(Vertex boneNode: theModel.getSkeletonMesh().getVerts()) {
+                                    selectVertex(boneNode);
+                                }
+                            }
+                        }
 						break;
 					case Keyboard.KEY_N:
 						if(focus == 0) {
@@ -900,11 +926,14 @@ public class Main extends LWJGLWindow {
 		glUseProgram(colorArrayProgram.theProgram);
 		glUniformMatrix4(colorArrayProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
 		glUniformMatrix4(colorArrayProgram.cameraToClip, false, cam2clip.fillAndFlipBuffer(mat4Buffer));
-		glUniform4f(colorArrayProgram.pointLightPos, 10f, 10f, 0f, 1.0f);
-		glUniform4f(colorArrayProgram.pointLightMag, 1.0f, 0.8f, 0.7f, 1.0f);
+		glUniform4f(colorArrayProgram.pointLightPos, 10f, 0f, 0f, 1.0f);
+        glUniform4f(colorArrayProgram.pointLightColor, 0.2f, 0.3f, 0.6f, 0f);
+		glUniform1f(colorArrayProgram.pointLightRadius, 10f);
+        glUniform1f(colorArrayProgram.pointLightFade, 1f);
         glUniform4f(colorArrayProgram.dirLightDir, 1f, 0f, 1f, 1.0f);
         glUniform4f(colorArrayProgram.dirLightMag, 0.2f, 0.2f, 0.2f, 1.0f);
-		glUniform4f(colorArrayProgram.ambient, 0.5f, 0.5f, 0.5f, 1.0f);
+		glUniform4f(colorArrayProgram.ambient, 0.3f, 0.3f, 0.3f, 1.0f);
+        glUniform1f(colorArrayProgram.gamma, 1f/2.2f);
 		glUseProgram( 0 );
 
 		/************************/
@@ -1116,7 +1145,6 @@ public class Main extends LWJGLWindow {
 		ArrayList<Vertex> verts = selection.getVerts();
 		clearSelection();
 		for(Vertex v: verts) {
-			//Vertex n = new Vertex(v.x+0.01f,v.y+0.01f,v.z+0.01f);
 			Vertex n = new Vertex(v.x,v.y,v.z);
 			theModel.add(n, true);
 			theModel.add(new Line(v,n), true);
@@ -1437,6 +1465,18 @@ public class Main extends LWJGLWindow {
 		}
 		clearSelection();
 	}
+
+    private void extrudeSelectedBoneNodes() {
+        ArrayList<Vertex> verts = selection.getVerts();
+        clearSelection();
+        for(Vertex v: verts) {
+            Vertex n = new Vertex(v.x, v.y, v.z);
+            theModel.addBoneNode(n);
+            theModel.addBone(v,n);
+            selectVertex(n);
+        }
+        grabbing = true;
+    }
 
 	private void save() {
 		try {
