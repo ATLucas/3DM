@@ -47,7 +47,6 @@ public class ShaderProgram {
 		cameraToClip = glGetUniformLocation(theProgram, "cameraToClip" );
 
         pointLightPos = glGetUniformLocation(theProgram, "pointLightPos");
-        pointLightColor = glGetUniformLocation(theProgram, "pointLightColor");
         pointLightRadius = glGetUniformLocation(theProgram, "pointLightRadius");
         pointLightFade = glGetUniformLocation(theProgram, "pointLightFade");
         dirLightDir = glGetUniformLocation(theProgram, "dirLightDir");

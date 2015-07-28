@@ -1,13 +1,12 @@
-#version 330
+#version 330 core
 
-in vec4 pos_interp;
+in vec4 position;
+in vec4 normal;
 in vec4 normal_interp;
-flat in vec4 normal_flat;
 
 out vec4 outputColor;
 
 uniform vec4 pointLightPos;
-uniform vec4 pointLightColor;
 uniform vec4 dirLightDir;
 uniform vec4 dirLightMag;
 uniform vec4 ambient;
@@ -49,16 +48,14 @@ void main()
 	float r = ((value >> 24) & 255) / 255.0;
 	vec4 diffuse = vec4(r, g, b, a);
 
-	float dirLight = dot(normal_interp, dirLightDir);
+	float dirLight = dot(normal, normalize(dirLightDir));
 	dirLight = clamp(dirLight, 0, 1) * dirLightMag;
 
-	vec4 pointLightDiff = pointLightPos - pos_interp;
+	vec4 pointLightDiff = pointLightPos - position;
 	float dist = length(pointLightDiff);
-
 	float pointLightMag = clamp(1.0 - dist*dist/(pointLightRadius*pointLightRadius), 0.0, 1.0);
 	pointLightMag *= pointLightMag;
-
-    float pointLight = pointLightFade * dot(normal_interp, normalize(pointLightDiff)) * pointLightMag;
+    float pointLight = pointLightFade * dot(normal, normalize(pointLightDiff)) * pointLightMag;
     pointLight = clamp(pointLight, 0, 1);
 
 	float celFactor = 0;
@@ -71,7 +68,6 @@ void main()
 	else
 		celFactor = pointLight * 3;
 
-	//vec4 accumLighting = (pointLightColor + diffuse) * pointLight + diffuse * dirLight + diffuse * ambient;
-	vec4 accumLighting = pointLightColor * celFactor + diffuse * dirLight + diffuse * ambient;
+	vec4 accumLighting = diffuse * celFactor + diffuse * dirLight + diffuse * ambient;
     outputColor = pow(accumLighting, vec4(gamma, gamma, gamma, 1.0));
 }

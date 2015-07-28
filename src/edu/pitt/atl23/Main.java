@@ -143,7 +143,7 @@ public class Main extends LWJGLWindow {
 		cursor = new Cursor();
 		panel = new Panel(guiWidth, guiHeight, cursor);
 		colorUniformProgram = new ShaderProgram("ThreeDim.vert", null, "ColorUniform.frag");
-		colorArrayProgram = new ShaderProgram("ThreeDim.vert", null, "ColorArrayLight.frag");
+		colorArrayProgram = new ShaderProgram("ThreeDim.vert", "FaceNormals.geo", "ColorArrayLight.frag");
 		colorUniform2DProgram = new ShaderProgram("TwoDim.vert", null, "ColorUniform.frag");
 		colorArray2DProgram = new ShaderProgram("TwoDim.vert", null, "ColorArray.frag");
         skeletonProgram = new ShaderProgram("Bones.vert", "Bones.geo", "ColorUniform.frag");
@@ -927,11 +927,10 @@ public class Main extends LWJGLWindow {
 		glUniformMatrix4(colorArrayProgram.worldToCamera, false, world2cam.fillAndFlipBuffer(mat4Buffer));
 		glUniformMatrix4(colorArrayProgram.cameraToClip, false, cam2clip.fillAndFlipBuffer(mat4Buffer));
 		glUniform4f(colorArrayProgram.pointLightPos, 10f, 0f, 0f, 1.0f);
-        glUniform4f(colorArrayProgram.pointLightColor, 0.2f, 0.3f, 0.6f, 0f);
-		glUniform1f(colorArrayProgram.pointLightRadius, 10f);
+		glUniform1f(colorArrayProgram.pointLightRadius, 11f);
         glUniform1f(colorArrayProgram.pointLightFade, 1f);
-        glUniform4f(colorArrayProgram.dirLightDir, 1f, 0f, 1f, 1.0f);
-        glUniform4f(colorArrayProgram.dirLightMag, 0.2f, 0.2f, 0.2f, 1.0f);
+        glUniform4f(colorArrayProgram.dirLightDir, 0f, 1f, 1f, 1.0f);
+        glUniform4f(colorArrayProgram.dirLightMag, 0.4f, 0.4f, 0.4f, 1.0f);
 		glUniform4f(colorArrayProgram.ambient, 0.3f, 0.3f, 0.3f, 1.0f);
         glUniform1f(colorArrayProgram.gamma, 1f/2.2f);
 		glUseProgram( 0 );

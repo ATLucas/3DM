@@ -3,9 +3,6 @@
 layout (lines) in;
 layout (triangle_strip, max_vertices = 12) out;
 
-smooth out float pointLight;
-smooth out float dirLight;
-
 void main() {
 	vec4 dv = gl_in[1].gl_Position - gl_in[0].gl_Position;
 	float factor = 0.05 * length(dv);
