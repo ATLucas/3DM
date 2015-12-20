@@ -8,9 +8,9 @@ out vec4 outputColor;
 
 uniform vec4 pointLightPos;
 uniform vec4 dirLightDir;
-uniform vec4 dirLightMag;
 uniform vec4 ambient;
 
+uniform float dirLightMag;
 uniform float pointLightRadius;
 uniform float pointLightFade;
 
