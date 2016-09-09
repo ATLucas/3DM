@@ -930,8 +930,8 @@ public class Main extends LWJGLWindow {
 		glUniform1f(colorArrayProgram.pointLightRadius, 11f);
         glUniform1f(colorArrayProgram.pointLightFade, 1f);
         glUniform4f(colorArrayProgram.dirLightDir, 0f, 1f, 1f, 1.0f);
-        glUniform4f(colorArrayProgram.dirLightMag, 0.4f, 0.4f, 0.4f, 1.0f);
-		glUniform4f(colorArrayProgram.ambient, 0.3f, 0.3f, 0.3f, 1.0f);
+        glUniform1f(colorArrayProgram.dirLightMag, 0.4f);
+		glUniform4f(colorArrayProgram.ambient, 0.1f, 0.1f, 0.1f, 1.0f);
         glUniform1f(colorArrayProgram.gamma, 1f/2.2f);
 		glUseProgram( 0 );
 
